@@ -1,0 +1,31 @@
+# Node.js Bağımlılıkları ve Çıktıları
+node_modules/
+npm-debug.log
+
+# Ortam Değişkenleri (ÇOK ÖNEMLİ!)
+.env
+apps/**/.env
+packages/**/.env
+
+# Editör/IDE Spesifik Dosyalar
+.vscode/
+.idea/
+*.iml
+
+# Çıktı Dizinleri (Derleme/Build)
+dist/
+build/
+.next/
+.turbo/
+.next-static-build/
+
+# Log Dosyaları
+*.log
+logs/
+
+# Test Raporları
+coverage/
+
+# Diğer Geçici Dosyalar
+*.tmp
+*~
