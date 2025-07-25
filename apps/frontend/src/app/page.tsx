@@ -2,15 +2,15 @@ import Image from "next/image";
 import dotenv from "dotenv";
 dotenv.config();
 
-  async function getData() {
-  const apiBaseUrl = process.env.NODE_ENV === "production" ? process.env.API_BASE_URL :  "http://localhost:4000/api";
+async function getData() {
+  const apiBaseUrl = process.env.NODE_ENV === "production" ? process.env.API_BASE_URL : "http://localhost:4000";
 
-  const res = await fetch(`${apiBaseUrl}/message`, {
+  const res = await fetch(`${apiBaseUrl}/api/message`, {
     cache: "no-store"
   });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch backend data");
+    console.error("Failed to fetch backend data. URL:", apiBaseUrl);
   }
   return res.json();
 }
