@@ -9,22 +9,24 @@ Yazılım Görev Planı (Developer bazlı görev listesi)
 hazırladım. Bu plan, geliştirici ekip ve iş birimleri (PM, iş analisti vs.) için aynı dili konuşur hale getirecek bir temeldir.
 
 ✅ 1. Yazılım Görev Planı (Feature bazlı ve gün gün)
-👨‍💻 Geliştirici Görev Listesi (Sprint tarzı)
-Gün	Modül / Görev	Görev Tipi
-1	Proje yapısının kurulumu (Next.js, TypeScript, Tailwind, Gemini AI setup)	Setup
-2	Prompt altyapısının kurulması (backend API → POST /generate-description)	Backend
-3	Ürün açıklama üretimi için prompt tasarımı ve testleri	Prompt Dev
-4	Ürün açıklama formu arayüzü: ürün adı, kategori, temel özellikler, tonlama	Frontend
-5	API entegrasyonu ile açıklama üretimini bağlamak	Integration
-6	Sık sorulan sorulara otomatik yanıt üretici (5 sabit senaryo için prompt)	Backend/Prompt
-7	SEO skor modülü (anahtar kelime sayısı, özgünlük oranı - basit skor)	Frontend/Logic
-8	UI iyileştirmeleri (responsive, loading, uyarı kutuları vs.)	Frontend
-9	Kullanıcı çıktısını kopyalama/CSV ile dışa aktarma	UX Feature
-10	Lokal veri saklama (kullanıcının son 5 açıklamasını görebilmesi)	Frontend
-11	Temiz test verisi üretmek (farklı ürün kategorileri)	Data/Testing
-12	Genel hata yönetimi, catch blokları, hata mesajları	QA
-13	Vercel deploy, demo ortamı, alan adı	Deploy
-14	Dokümantasyon, demo videosu, sunum	Delivery
+👨‍💻 **Geliştirici Görev Listesi (Sprint tarzı)**
+
+| Gün | Modül / Görev                                                              | Görev Tipi     |
+|:----|:---------------------------------------------------------------------------|:---------------|
+| 1   | Proje yapısının kurulumu (Next.js, TypeScript, Tailwind, Gemini AI setup)  | Setup          |
+| 2   | Prompt altyapısının kurulması (backend API → POST /generate-description)   | Backend        |
+| 3   | Ürün açıklama üretimi için prompt tasarımı ve testleri                     | Prompt Dev     |
+| 4   | Ürün açıklama formu arayüzü: ürün adı, kategori, temel özellikler, tonlama | Frontend       |
+| 5   | API entegrasyonu ile açıklama üretimini bağlamak                           | Integration    |
+| 6   | Sık sorulan sorulara otomatik yanıt üretici (5 sabit senaryo için prompt)  | Backend/Prompt |
+| 7   | SEO skor modülü (anahtar kelime sayısı, özgünlük oranı - basit skor)       | Frontend/Logic |
+| 8   | UI iyileştirmeleri (responsive, loading, uyarı kutuları vs.)               | Frontend       |
+| 9   | Kullanıcı çıktısını kopyalama/CSV ile dışa aktarma                         | UX Feature     |
+| 10  | Lokal veri saklama (kullanıcının son 5 açıklamasını görebilmesi)           | Frontend       |
+| 11  | Temiz test verisi üretmek (farklı ürün kategorileri)                       | Data/Testing   |
+| 12  | Genel hata yönetimi, catch blokları, hata mesajları                        | QA             |
+| 13  | Vercel deploy, demo ortamı, alan adı                                       | Deploy         |
+| 14  | Dokümantasyon, demo videosu, sunum                                         | Delivery       |
 
 📄 2. İş Gereksinimleri Dokümanı (SRS)
 🔹 2.1 Proje Tanımı
