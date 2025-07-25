@@ -9,8 +9,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "npx --yes install lightningcss"
+    "lint": "next lint"
   },
   "dependencies": {
     "dotenv": "^17.2.1",
