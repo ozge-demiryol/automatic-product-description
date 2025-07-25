@@ -1,7 +1,11 @@
 import Image from "next/image";
+import dotenv from "dotenv";
+dotenv.config();
 
   async function getData() {
-  const res = await fetch("http://localhost:4000/api/message", {
+  const apiBaseUrl = process.env.NODE_ENV === "production" ? process.env.API_BASE_URL :  "http://localhost:4000/api";
+
+  const res = await fetch(`${apiBaseUrl}/message`, {
     cache: "no-store"
   });
 
