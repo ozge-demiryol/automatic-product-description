@@ -4,8 +4,6 @@
 - **Frontend Framework:** Next.js (App Router)
 - **Styling:** Tailwind CSS
 - **Icon Library:** Lucide Icons (https://lucide.dev/icons)  
-  > ✅ Açık kaynak, sade, modern, figma uyumlu.
-
 ---
 
 ## 🎨 Color Palette
@@ -89,7 +87,6 @@ html
 Copy
 Edit
 <div class="fixed bottom-4 right-4 bg-green-500 text-white text-sm px-4 py-2 rounded shadow">
-  Açıklama kopyalandı!
 </div>
 Show for 3 seconds. Use animate-fade-in-out (with Framer Motion or Tailwind animation utilities).
 
