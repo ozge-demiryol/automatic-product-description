@@ -57,10 +57,7 @@ NFR-03	Prompt çıktıları minimum %60 özgünlük içermelidir
 
 🔁 3. İş Akışı (User Flow + Sistem Akışı)
 👤 Kullanıcı Akışı (User Flow)
-mermaid
-Copy
-Edit
-graph TD
+
 A[Kullanıcı Formu Aç] --> B[Ürün adı, kategori, özellik gir]
 B --> C[Tonlama Seçimi]
 C --> D[Açıklama Üret butonu]
@@ -70,9 +67,7 @@ E --> F2[SEO skorunu gör]
 E --> F3[SSS yanıtlarını gör]
 🖥️ Sistem Akışı (Backend / AI)
 mermaid
-Copy
-Edit
-graph TD
+
 A[Frontend Formdan istek] --> B[API: /generate-description]
 B --> C[Gemini AI Prompt gönder]
 C --> D[Açıklama + Tonlama üret]

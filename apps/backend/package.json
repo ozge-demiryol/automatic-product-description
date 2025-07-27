@@ -13,8 +13,13 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "cors": "^2.8.5",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongodb": "^6.18.0",
+    "mongoose": "^8.16.4",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.25"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
