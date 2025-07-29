@@ -1,14 +1,15 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import { productRoutes } from './features/products/product.routes';
 
-// .env dosyasındaki değişkenleri yükle
 dotenv.config();
 
 const app = express();
 
-// JSON isteklerini okuyabilmek için middleware
+app.use(cors());
+
 app.use(express.json());
 
 // Veritabanı Bağlantısı
