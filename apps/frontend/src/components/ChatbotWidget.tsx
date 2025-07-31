@@ -27,6 +27,9 @@ export default function ChatbotWidget({ productId, initialMessage, sellerId }: C
     onFinish: (message: Message) => {
       console.log('AI response finished:', message.content);
     },
+    onError: (error) => {
+      console.error('Chat error:', error);
+    }
   });
 
   const toggleChat = () => {
@@ -62,7 +65,7 @@ export default function ChatbotWidget({ productId, initialMessage, sellerId }: C
             {/* initialMessage'ı sadece UI'da gösteriyoruz, useChat'in mesaj dizisine eklemiyoruz */}
             {messages.length === 0 && initialMessage ? ( // initialMessage'ın varlığını da kontrol edin
               <div
-                key="initial-message-display" // Benzersiz bir anahtar verin
+                key="initial-message-display"
                 className="flex justify-start"
               >
                 <div

@@ -14,6 +14,8 @@ export class FaqController {
       const { id: productId } = req.params;
       const { question, answer } = req.body;
 
+      console.log(productId)
+
       if (!Types.ObjectId.isValid(productId)) {
         res.status(400).json({ message: 'Geçersiz ürün IDsi.' });
         return;
@@ -24,12 +26,15 @@ export class FaqController {
         return;
       }
 
+      console.log('Yeni SSS bilgileri:', { productId, question, answer })
+
       const newFaq = await this.addFaqCommandHandler.execute({
         productId: new Types.ObjectId(productId),
         question,
         answer,
       });
 
+      console.log('Yeni SSS:', newFaq);
       res.status(201).json(newFaq);
     } catch (error) {
       console.error('SSS eklenirken hata oluştu:', error);

@@ -35,7 +35,7 @@ app.get('/api', (req, res) => {
 // Rotaları Uygulamaya Ekle
 app.use('/api/products', productRoutes);
 app.use('/api/chat', chatRoutes);
-app.use('/api/products/:id/faq', (req, res) => faqRoutes);
+app.use('/api/products/:id/faq', faqRoutes);
 app.use('api/brands/:id/', brandRoutes)
 
 export default app;

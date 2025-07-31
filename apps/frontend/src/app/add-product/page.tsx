@@ -163,7 +163,7 @@ export default function AddProductPage() {
         e.preventDefault();
         if (!faqQuestion || !faqAnswer) return;
 
-        //setIsFaqLoading(true);
+        setIsFaqLoading(true);
         setMessage(null);
 
         try {
@@ -172,13 +172,14 @@ export default function AddProductPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ question: faqQuestion, answer: faqAnswer }),
             });
+
+            console.log(res)
             if (!res.ok) throw new Error((await res.json()).message || 'SSS eklenemedi.');
             const newFaq = await res.json();
             setAddedFaqs(prev => [...prev, { question: newFaq.question, answer: newFaq.answer }]);
             setFaqQuestion('');
             setFaqAnswer('');
             setMessage({ type: 'success', text: 'SSS başarıyla eklendi!' });
-            setIsFaqLoading(false);
         } catch (error: any) {
             setMessage({ type: 'error', text: `SSS eklenemedi: ${error.message}` });
         } finally {
@@ -201,6 +202,7 @@ export default function AddProductPage() {
         setFaqQuestion('');
         setFaqAnswer('');
         setAddedFaqs([]);
+        setIsFaqLoading(false);
         setMessage(null);
     };
 
