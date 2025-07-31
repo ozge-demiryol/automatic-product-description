@@ -1,12 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
+import ChatbotWidget from '@/components/ChatbotWidget';
 
 interface Product {
   id: string;
   name: string;
   price: number;
   description: string;
-  imageUrl?: string; 
+  imageUrl?: string;
 }
 
 export default async function ProductDetailPage({ params }: { params: { productId: string } }) {
@@ -17,7 +18,7 @@ export default async function ProductDetailPage({ params }: { params: { productI
   try {
     const apiBaseUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_API_BASE_URL : "http://localhost:4000/api";
     const res = await fetch(`${apiBaseUrl}/products/${productId}`, {
-      cache: 'no-store', // Her istekte verinin yeniden çekilmesini sağlar
+      cache: 'no-store', // Ensures data is re-fetched on every request
     });
 
     if (!res.ok) {
@@ -37,7 +38,7 @@ export default async function ProductDetailPage({ params }: { params: { productI
     return (
       <div className="max-w-3xl mx-auto px-4 py-8 text-center">
         <h1 className="text-xl font-semibold text-gray-900 mb-4">Ürün bulunamadı.</h1>
-        <p className="text-base text-gray-500 mb-6">Aradığınız ürün mevcut olmayabilir veya bir hata oluştu.</p> 
+        <p className="text-base text-gray-500 mb-6">Aradığınız ürün mevcut olmayabilir veya bir hata oluştu.</p>
         <Link href="/" className="text-blue-600 hover:underline text-base font-medium">
           &larr; Tüm Ürünlere Geri Dön
         </Link>
@@ -45,13 +46,15 @@ export default async function ProductDetailPage({ params }: { params: { productI
     );
   }
 
+  const initialBotMessage = `Merhaba! Bu ${product.name} ürünü hakkında size nasıl yardımcı olabilirim?`;
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <Link href="/products" className="text-blue-600 hover:underline mb-6 inline-block text-base font-medium"> {/* Button Text stili */}
+      <Link href="/products" className="text-blue-600 hover:underline mb-6 inline-block text-base font-medium">
         &larr; Tüm Ürünlere Geri Dön
       </Link>
 
-      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-300"> {/* AI Output Card'a benzer stil */}
+      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-300">
         {product.imageUrl && (
           <img
             src={product.imageUrl}
@@ -70,6 +73,10 @@ export default async function ProductDetailPage({ params }: { params: { productI
           Sepete Ekle
         </button>
       </div>
+      <ChatbotWidget
+        productId={productId}
+        initialMessage={initialBotMessage}
+      />
     </div>
   );
 }

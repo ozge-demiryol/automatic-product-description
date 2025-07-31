@@ -3,6 +3,9 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { productRoutes } from './features/products/product.routes';
+import { chatRoutes } from './features/chat/chat.routes';
+import { faqRoutes } from './features/faq/faq.routes'
+import { brandRoutes } from './features/brand/brands.route';
 
 dotenv.config();
 
@@ -29,7 +32,10 @@ app.get('/api', (req, res) => {
   res.send('API çalışıyor! 🚀');
 });
 
-// Ürün Rotalarını Uygulamaya Ekle
+// Rotaları Uygulamaya Ekle
 app.use('/api/products', productRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/products/:id/faq', (req, res) => faqRoutes);
+app.use('api/brands/:id/', brandRoutes)
 
 export default app;

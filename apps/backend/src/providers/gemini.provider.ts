@@ -1,9 +1,13 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import {ChatSession, GoogleGenerativeAI } from '@google/generative-ai';
 import { AIProvider } from './AIProvider';
+import { ProductDescriptionRequest } from './ProductDescriptionRequest';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export class GeminiAIProvider implements AIProvider {
     private genAI: GoogleGenerativeAI;
     private model: string = "gemini-2.5-flash";
+    private embeddingModel: string = "text-embedding-004";
 
     constructor() {
         const apiKey = process.env.GEMINI_API_KEY;
@@ -13,21 +17,21 @@ export class GeminiAIProvider implements AIProvider {
         this.genAI = new GoogleGenerativeAI(apiKey);
     }
 
-    async generateProductDescription(
-        productName: string,
-        category: string,
-        keywords: string[],
-        tone: string
-    ): Promise<string> {
+    startChat(chatConfig: any): ChatSession {
+        const model = this.genAI.getGenerativeModel({ model: this.model });
+        return model.startChat(chatConfig);
+
+    }
+    async generateProductDescription(request: ProductDescriptionRequest): Promise<string> {
         try {
             const model = this.genAI.getGenerativeModel({ model: this.model });
 
             const prompt = `E-commerce and SEO expert assistant. Your task is to write an engaging and SEO-friendly product description for an e-commerce website based on the following information:
-        - Product Name: ${productName}
-        - Category: ${category}
-        - Keywords: ${keywords.join(', ')}
+        - Product Name: ${request.productName}
+        - Category: ${request.category}
+        - Keywords: ${request.keywords.join(', ')}
 
-        The description should highlight the product's features and benefits and have a ${tone} tone.
+        The description should highlight the product's features and benefits and have a ${request.tone} tone.
         The description should be in Turkish.
         The SEO score of the description must be at least 90.
 
@@ -38,7 +42,7 @@ export class GeminiAIProvider implements AIProvider {
         }`;
 
             const result = await model.generateContent(prompt);
-            const response = await result.response.text();
+            const response = result.response.text();
             console.log(response)
             return response;
         } catch (error) {
@@ -46,9 +50,24 @@ export class GeminiAIProvider implements AIProvider {
             return "Bu ürün için otomatik açıklama oluşturulamadı.";
         }
     }
+
+    async createEmbeddings(text: string): Promise<number[]> {
+        if (!text || text.trim() === '') {
+            console.warn("Attempted to generate embedding for empty text. Returning empty array.");
+            return [];
+        }
+
+        try {
+            const embedding = this.genAI.getGenerativeModel({ model: this.embeddingModel });
+            const result = await embedding.embedContent(text);
+            return result.embedding.values;
+        } catch (error) {
+            console.error(`Error generating embedding for text: "${text.substring(0, 50)}..."`, error);
+            return [];
+        }
+    }
 }
 
-// export class GeminiAIProvider implements AIProvider {
 //     private model: any = 'gemini-2.5-flash';
 //     private apiKey: string;
 

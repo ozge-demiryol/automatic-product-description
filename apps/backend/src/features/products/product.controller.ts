@@ -13,7 +13,7 @@ export class ProductController {
 
   async addProduct(req: Request, res: Response): Promise<void> {
     try {
-      const { name, category, keywords, description } = req.body;
+      const { name, category, keywords, description, price } = req.body;
 
       if (!name || !category || !keywords) {
         res.status(400).json({ message: 'name, category ve keywords alanları zorunludur.' });
@@ -22,7 +22,7 @@ export class ProductController {
 
       const addProductHandler = new AddProductCommandHandler();
 
-      const newProduct = await addProductHandler.execute({ name, category, keywords, description });
+      const newProduct = await addProductHandler.execute({ name, category, keywords, description, price });
 
       res.status(201).json(newProduct);
     } catch (error) {
@@ -100,8 +100,5 @@ export class ProductController {
       console.error("Ürün alınırken hata oluştu:", error);
       res.status(500).json({ message: 'Sunucu hatası oluştu.' });
     }
-  }
-
-  async deleteProduct(req: Request, res: Response): Promise<void> {
   }
 }

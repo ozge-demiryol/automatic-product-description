@@ -1,4 +1,5 @@
 import { GeminiAIProvider } from '../../../providers/gemini.provider';
+import { ProductDescriptionRequest } from '../../../providers/ProductDescriptionRequest';
 import { GenerateProductDescripitonPayload } from '../../products/generateProductDescription/GenerateProductDescriptionPayload'
 import { ProductRepository } from '../product.repository';
 
@@ -14,7 +15,14 @@ export class GenerateProductDescriptionCommandHandler {
     async execute(payload: GenerateProductDescripitonPayload): Promise<string> {
         try {
             console.log("Ürün açıklaması Gemini AI ile oluşturuluyor...");
-            let description = await this.geminiService.generateProductDescription(payload.name, payload.category, payload.keywords, payload.tone);
+            let productDescriptionRequest: ProductDescriptionRequest = {
+                productName: payload.name,
+                category: payload.category,
+                keywords: payload.keywords,
+                tone: payload.tone
+            }
+
+            let description = await this.geminiService.generateProductDescription(productDescriptionRequest);
 
             // **Crucial Step: Clean up the response to remove potential markdown wrappers**
             // The AI might still occasionally add these, so we'll explicitly remove them.
@@ -35,7 +43,7 @@ export class GenerateProductDescriptionCommandHandler {
                 seoScore: 0,
                 productDescription: "Unable to generate a valid JSON product description. AI response was malformed."
             });
-        } 
+        }
     }
 
 }

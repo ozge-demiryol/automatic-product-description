@@ -1,16 +1,16 @@
-import { IProductRepository } from './IProductRepository';
+import { RepositoryBase } from '../base.repository';
 import { ProductModel, IProduct } from './product.model';
 import { Types } from 'mongoose';
 
-export class ProductRepository implements IProductRepository {
+export class ProductRepository implements RepositoryBase<IProduct> {
   async findAll(): Promise<IProduct[]> {
     return await ProductModel.find().exec();
   }
   async findById(id: Types.ObjectId): Promise<IProduct | null> {
     return await ProductModel.findById(id).exec();
   }
-  delete(id: Types.ObjectId): Promise<IProduct | null> {
-    throw new Error('Method not implemented.');
+  async delete(id: Types.ObjectId): Promise<IProduct | null> {
+    return await ProductModel.findByIdAndDelete(id).exec();
   }
   async create(productData: Partial<IProduct>): Promise<IProduct> {
     const product = new ProductModel(productData);
@@ -20,6 +20,4 @@ export class ProductRepository implements IProductRepository {
   async update(productData: Partial<IProduct>): Promise<IProduct | null> {
     return await ProductModel.findByIdAndUpdate(productData._id, productData, { new: true });
   }
-
-
 }

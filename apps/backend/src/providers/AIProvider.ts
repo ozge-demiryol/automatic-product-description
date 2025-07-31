@@ -1,5 +1,6 @@
+import { ProductDescriptionRequest } from "./ProductDescriptionRequest";
 export interface AIProvider {
-  generateProductDescription(productName: string,
-    category: string,
-    keywords: string[], tone: string): Promise<string>;
+  generateProductDescription(request: ProductDescriptionRequest): Promise<string>;
+  createEmbeddings(text: string): Promise<number[]>
+  startChat(chatConfig: any): any
 }

@@ -5,4 +5,5 @@ export interface AddProductCommandPayload {
   category: string;
   keywords: string[];
   description?: string;
+  price: number
 }

@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-// import { Loader2 } from 'lucide-react'; // Eğer lucide-react kuruluysa uncomment edin
+// import { Loader2, CheckCircle, AlertTriangle, Info } from 'lucide-react';
 
+// Arayüz tanımlamaları (Interface definitions)
 interface ProductInput {
     name: string;
     category: string;
@@ -17,6 +18,15 @@ interface GeneratedDescriptionResponse {
     customerQuestions?: string[];
 }
 
+interface Faq {
+    question: string;
+    answer: string;
+}
+
+interface SavedProductResponse {
+    _id: string;
+}
+
 interface FinalProductSave {
     name: string;
     price: number;
@@ -27,6 +37,10 @@ interface FinalProductSave {
 }
 
 export default function AddProductPage() {
+    // Adım yönetimi için state
+    const [currentStep, setCurrentStep] = useState(1); // 1: Ürün Detayları, 2: SSS Ekleme
+
+    // 1. Adım State'leri (Ürün Bilgileri)
     const [productName, setProductName] = useState('');
     const [productCategory, setProductCategory] = useState('');
     const [productTone, setProductTone] = useState('');
@@ -34,174 +48,146 @@ export default function AddProductPage() {
     const [productImageUrl, setProductImageUrl] = useState('');
     const [productPrice, setProductPrice] = useState('');
 
-    const [generatedDescription, setGeneratedDescription] = useState(''); // AI tarafından üretilen ham açıklama ve kullanıcı düzenlemeleri için
-    const [displayDescription, setDisplayDescription] = useState('');     // Sadece yazım efekti sırasında gösterilen metin
+    const [generatedDescription, setGeneratedDescription] = useState('');
+    const [displayDescription, setDisplayDescription] = useState('');
     const [seoScore, setSeoScore] = useState<number | null>(null);
     const [customerQuestions, setCustomerQuestions] = useState<string[] | null>(null);
 
-    const [isLoading, setIsLoading] = useState(false); // Tüm async işlemleri kapsayan genel loading
-    const [isGenerating, setIsGenerating] = useState(false); // Sadece açıklama üretimi ve yazım efekti için loading
+    // 2. Adım State'leri (SSS)
+    const [savedProductId, setSavedProductId] = useState<string | null>(null);
+    const [faqQuestion, setFaqQuestion] = useState('');
+    const [faqAnswer, setFaqAnswer] = useState('');
+    const [addedFaqs, setAddedFaqs] = useState<Faq[]>([]);
+    const [isFaqLoading, setIsFaqLoading] = useState(false);
+
+    // Genel State'ler
+    const [isLoading, setIsLoading] = useState(false);
+    const [isGenerating, setIsGenerating] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-    const toneOptions = ['samimi', 'profesyonel', 'lüks', 'teknik'];
-
-    const primaryBlue = 'blue-600';
-    const primaryHover = 'blue-700';
-    const lightBackground = 'blue-50';
-    const grayText = 'gray-500';
-    const borderGray = 'gray-300';
-    const successGreen = 'green-500';
-    const errorRed = 'red-500';
-    const darkText = 'gray-900';
-
-    const apiBaseUrl = process.env.NEXT_PUBLIC_NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_API_BASE_URL : "http://localhost:4000/api";
-    const keywordsArray = keywordsInput.split(',').map(keyword => keyword.trim()).filter(keyword => keyword.length > 0);
-
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
+    const keywordsArray = keywordsInput.split(',').map(keyword => keyword.trim()).filter(keyword => keyword.length > 0);
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000/api";
 
-    // Yazım efekti için useEffect
+    // Yazım efekti
     useEffect(() => {
-        if (generatedDescription && isGenerating) {
+        if (isGenerating && generatedDescription) {
             let i = 0;
-            // setDisplayDescription(''); // Her yeni üretimde sıfırla - başlangıçta zaten boş olacak
             const typingInterval = setInterval(() => {
-                setDisplayDescription((prev) => prev + generatedDescription.charAt(i));
-                i++;
-                if (i === generatedDescription.length) {
+                if (i < generatedDescription.length) {
+                    setDisplayDescription(prev => prev + generatedDescription.charAt(i));
+                    i++;
+                } else {
                     clearInterval(typingInterval);
-                    setIsGenerating(false); // Yazım bittiğinde false yap
-                    if (descriptionRef.current) {
-                        descriptionRef.current.scrollTop = descriptionRef.current.scrollHeight; // En alta kaydır
-                    }
+                    setIsGenerating(false);
                 }
-            }, 20); // Her karakter arası gecikme (ms)
+            }, 20);
             return () => clearInterval(typingInterval);
-        } else if (!generatedDescription && !isGenerating) {
-            // Eğer açıklama yoksa ve yazım efekti aktif değilse, textarea'yı boşalt
-            setDisplayDescription('');
         }
     }, [generatedDescription, isGenerating]);
 
 
-    const handleGenerateDescription = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        setMessage(null);
-        setGeneratedDescription(''); // Yeni üretim öncesi temizle
-        setDisplayDescription('');   // Yazım efekti için de temizle
-        setSeoScore(null);
-        setCustomerQuestions(null);
-        setIsLoading(true);
-        setIsGenerating(true);
-
+    // Fonksiyonlar
+    const handleGenerateDescription = async () => {
         if (!productName || !productCategory || !productTone || keywordsArray.length === 0) {
             setMessage({ type: 'error', text: 'Ürün adı, kategori, tonlama ve en az bir anahtar kelime zorunludur.' });
-            setIsLoading(false);
-            setIsGenerating(false);
             return;
         }
-
-        const productDataForAI: ProductInput = {
-            name: productName,
-            category: productCategory,
-            tone: productTone,
-            keywords: keywordsArray
-        };
+        
+        setMessage(null);
+        setGeneratedDescription('');
+        setDisplayDescription('');
+        setIsLoading(true);
+        setIsGenerating(true);
 
         try {
             const res = await fetch(`${apiBaseUrl}/products/generate-description`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(productDataForAI),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: productName, category: productCategory, tone: productTone, keywords: keywordsArray }),
             });
-
-            if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.message || `Açıklama üretilirken bir hata oluştu: ${res.statusText}`);
-            }
-
+            if (!res.ok) throw new Error((await res.json()).message || 'API hatası');
             const data: GeneratedDescriptionResponse = await res.json();
-            setGeneratedDescription(data.productDescription); // Tam açıklamayı state'e kaydet
+            setGeneratedDescription(data.productDescription);
             setSeoScore(data.seoScore);
-            setCustomerQuestions(data.customerQuestions || null);
-
-            setMessage({ type: 'success', text: 'Ürün açıklaması başarıyla üretildi!' });
-
         } catch (error: any) {
-            console.error('Açıklama üretilirken hata:', error);
-            setMessage({ type: 'error', text: error.message || 'Açıklama üretilirken bilinmeyen bir hata oluştu.' });
-            setIsGenerating(false); // Hata durumunda yazım efektini durdur
+            setMessage({ type: 'error', text: `Açıklama üretilemedi: ${error.message}` });
+            setIsGenerating(false);
         } finally {
-            setIsLoading(false); // Genel loading'i durdur
+            setIsLoading(false);
         }
     };
 
-    const handleSaveProduct = async () => {
-        setMessage(null);
-        setIsLoading(true);
-
+    const handleSaveProductAndGoToNextStep = async () => {
+        if (!generatedDescription || isGenerating) {
+            setMessage({ type: 'error', text: 'Lütfen önce açıklama üretin ve işlemin bitmesini bekleyin.' });
+            return;
+        }
         const parsedPrice = parseFloat(productPrice);
         if (isNaN(parsedPrice) || parsedPrice <= 0) {
             setMessage({ type: 'error', text: 'Geçerli bir fiyat giriniz.' });
-            setIsLoading(false);
-            return;
-        }
-        // Eğer açıklama alanı boşsa veya yazım efekti henüz bitmediyse kaydetmeyi engelle
-        if (!generatedDescription || isGenerating) {
-            setMessage({ type: 'error', text: 'Lütfen önce bir ürün açıklaması üretin ve yazım efektinin bitmesini bekleyin.' });
-            setIsLoading(false);
             return;
         }
 
+        setIsLoading(true);
+        setMessage(null);
+        
         const productToSave: FinalProductSave = {
             name: productName,
             price: parsedPrice,
-            description: generatedDescription, // Kullanıcının düzenlediği nihai açıklama
+            description: generatedDescription,
             category: productCategory,
             keywords: keywordsArray,
             imageUrl: productImageUrl || undefined,
         };
 
         try {
-            console.log("Kaydedilecek ürün açıklaması:", generatedDescription)
             const res = await fetch(`${apiBaseUrl}/products`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(productToSave),
             });
-
-            if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.message || `Ürün kaydedilirken bir hata oluştu: ${res.statusText}`);
-            }
-
-            setMessage({ type: 'success', text: 'Ürün başarıyla kaydedildi!' });
-            // Formu sıfırla
-            setProductName('');
-            setProductCategory('');
-            setProductTone('');
-            setKeywordsInput('');
-            setProductImageUrl('');
-            setProductPrice('');
-            setGeneratedDescription('');
-            setDisplayDescription('');
-            setSeoScore(null);
-            setCustomerQuestions(null);
-
+            if (!res.ok) throw new Error((await res.json()).message || 'Ürün kaydedilemedi.');
+            const savedProduct: SavedProductResponse = await res.json();
+            setSavedProductId(savedProduct._id);
+            setMessage({ type: 'success', text: 'Ürün başarıyla kaydedildi! Şimdi SSS ekleyebilirsiniz.' });
+            setCurrentStep(2); // Sonraki adıma geç
         } catch (error: any) {
-            console.error('Ürün kaydedilirken hata:', error);
-            setMessage({ type: 'error', text: error.message || 'Ürün kaydedilirken bilinmeyen bir hata oluştu.' });
+            setMessage({ type: 'error', text: `Ürün kaydedilemedi: ${error.message}` });
         } finally {
             setIsLoading(false);
         }
     };
 
-    const handleCancel = () => {
-        // Tüm formu sıfırla
+    const handleAddFaq = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!faqQuestion || !faqAnswer) return;
+
+        //setIsFaqLoading(true);
+        setMessage(null);
+
+        try {
+            const res = await fetch(`${apiBaseUrl}/products/${savedProductId}/faq`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question: faqQuestion, answer: faqAnswer }),
+            });
+            if (!res.ok) throw new Error((await res.json()).message || 'SSS eklenemedi.');
+            const newFaq = await res.json();
+            setAddedFaqs(prev => [...prev, { question: newFaq.question, answer: newFaq.answer }]);
+            setFaqQuestion('');
+            setFaqAnswer('');
+            setMessage({ type: 'success', text: 'SSS başarıyla eklendi!' });
+            setIsFaqLoading(false);
+        } catch (error: any) {
+            setMessage({ type: 'error', text: `SSS eklenemedi: ${error.message}` });
+        } finally {
+            setIsFaqLoading(false);
+        }
+    };
+
+    const resetFormAndStartOver = () => {
+        setCurrentStep(1);
         setProductName('');
         setProductCategory('');
         setProductTone('');
@@ -211,214 +197,135 @@ export default function AddProductPage() {
         setGeneratedDescription('');
         setDisplayDescription('');
         setSeoScore(null);
-        setCustomerQuestions(null);
+        setSavedProductId(null);
+        setFaqQuestion('');
+        setFaqAnswer('');
+        setAddedFaqs([]);
         setMessage(null);
-        setIsLoading(false);
-        setIsGenerating(false);
-    };
-
-    const handleCopyDescription = () => {
-        if (displayDescription) {
-            navigator.clipboard.writeText(displayDescription);
-            setMessage({ type: 'success', text: 'Açıklama panoya kopyalandı!' });
-        } else {
-            setMessage({ type: 'error', text: 'Kopyalanacak bir açıklama yok.' });
-        }
     };
 
     return (
         <div className="max-w-3xl mx-auto px-4 py-8">
-            <Link href="/products" className={`text-${primaryBlue} hover:underline mb-6 inline-block text-base font-medium`}>
+            <Link href="/products" className="text-blue-600 hover:underline mb-6 inline-block text-base font-medium">
                 &larr; Tüm Ürünlere Geri Dön
             </Link>
 
-            <h1 className={`text-2xl font-semibold text-${darkText} mb-6`}>
-                Yeni Ürün Ekle (Yapay Zeka Destekli Açıklama)
-            </h1>
+            <h1 className="text-2xl font-semibold text-gray-900 mb-2">Yeni Ürün Ekle</h1>
+            <p className="text-base text-gray-500 mb-6">
+                Adım {currentStep} / 2: {currentStep === 1 ? 'Ürün Detayları ve Açıklama' : 'Sıkça Sorulan Sorular'}
+            </p>
 
-            <form onSubmit={handleGenerateDescription} className={`bg-white rounded-xl shadow-lg p-6 border border-${borderGray} space-y-4`}>
-
-                {/* Mesaj Kutusu */}
-                {message && (
-                    <div
-                        className={`px-4 py-2 rounded shadow text-sm font-medium ${message.type === 'success' ? `bg-${successGreen} text-white` : `bg-${errorRed} text-white`
-                            }`}
-                    >
-                        {message.text}
+            {message && (
+                <div className={`px-4 py-3 rounded-lg shadow text-sm font-medium mb-4 text-white ${message.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`}>
+                    {message.text}
+                </div>
+            )}
+            
+            {/* Adım 1: Ürün Detayları */}
+            <div className={currentStep === 1 ? 'block' : 'hidden'}>
+                <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-300 space-y-5">
+                    {/* Form Alanları */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label htmlFor="productName" className="text-sm text-gray-600">Ürün Adı</label>
+                            <input id="productName" type="text" className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" placeholder="Örn: Yeni Model Bluetooth Hoparlör" value={productName} onChange={(e) => setProductName(e.target.value)} required />
+                        </div>
+                        <div>
+                            <label htmlFor="productCategory" className="text-sm text-gray-600">Kategori</label>
+                            <input id="productCategory" type="text" className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" placeholder="Örn: Elektronik" value={productCategory} onChange={(e) => setProductCategory(e.target.value)} required />
+                        </div>
+                        <div>
+                            <label htmlFor="productPrice" className="text-sm text-gray-600">Fiyat (₺)</label>
+                            <input id="productPrice" type="number" step="0.01" className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" placeholder="Örn: 499.90" value={productPrice} onChange={(e) => setProductPrice(e.target.value)} required />
+                        </div>
+                         <div>
+                            <label htmlFor="productImageUrl" className="text-sm text-gray-600">Görsel URL (İsteğe Bağlı)</label>
+                            <input id="productImageUrl" type="url" className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" placeholder="https://..." value={productImageUrl} onChange={(e) => setProductImageUrl(e.target.value)} />
+                        </div>
                     </div>
-                )}
 
-                {/* Ürün Bilgileri Giriş Alanları */}
-                <div className="flex flex-col gap-1">
-                    <label htmlFor="productName" className={`text-sm text-${grayText}`}>Ürün Adı</label>
-                    <input
-                        id="productName"
-                        type="text"
-                        className={`border border-${borderGray} focus:border-${primaryBlue} focus:ring-${lightBackground} rounded-lg px-4 py-2 text-${darkText}`}
-                        placeholder="Örn: Yeni Model Bluetooth Hoparlör"
-                        value={productName}
-                        onChange={(e) => setProductName(e.target.value)}
-                        required
-                        disabled={isLoading}
-                    />
-                </div>
+                    <div>
+                        <label className="text-sm text-gray-600">Tonlama</label>
+                        <div className="flex gap-2 flex-wrap mt-1">
+                            {['Samimi', 'Profesyonel', 'Lüks', 'Teknik'].map((tone) => (
+                                <button key={tone} type="button" onClick={() => setProductTone(tone.toLowerCase())} className={`px-4 py-2 rounded-lg text-sm font-medium transition ${productTone === tone.toLowerCase() ? 'bg-blue-600 text-white shadow' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}>
+                                    {tone}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label htmlFor="keywordsInput" className="text-sm text-gray-600">Anahtar Kelimeler / Kısa Açıklamalar (Virgülle ayırın)</label>
+                        <textarea id="keywordsInput" rows={3} className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2 resize-y" placeholder="suya dayanıklı, yüksek ses kalitesi, uzun pil ömrü" value={keywordsInput} onChange={(e) => setKeywordsInput(e.target.value)} required />
+                    </div>
 
-                <div className="flex flex-col gap-1">
-                    <label htmlFor="productCategory" className={`text-sm text-${grayText}`}>Kategori</label>
-                    <input
-                        id="productCategory"
-                        type="text"
-                        className={`border border-${borderGray} focus:border-${primaryBlue} focus:ring-${lightBackground} rounded-lg px-4 py-2 text-${darkText}`}
-                        placeholder="Örn: Elektronik, Giyim, Ev Eşyası"
-                        value={productCategory}
-                        onChange={(e) => setProductCategory(e.target.value)}
-                        required
-                        disabled={isLoading}
-                    />
-                </div>
+                    <button type="button" onClick={handleGenerateDescription} className="w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50" disabled={isLoading}>
+                        {isGenerating ? 'Açıklama Üretiliyor...' : 'Yapay Zeka ile Açıklama Oluştur'}
+                    </button>
 
-                {/* Tonlama Seçim Butonları */}
-                <div className="flex flex-col gap-1">
-                    <label className={`text-sm text-${grayText}`}>Tonlama</label>
-                    <div className="flex gap-2 flex-wrap">
-                        {toneOptions.map((tone) => (
-                            <button
-                                key={tone}
-                                type="button"
-                                onClick={() => setProductTone(tone)}
-                                className={`
-                                    px-4 py-2 rounded-lg text-sm font-medium transition
-                                    ${productTone === tone
-                                        ? `bg-${primaryBlue} text-white shadow`
-                                        : `bg-gray-200 text-gray-800 hover:bg-gray-300`
-                                    }
-                                    ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}
-                                `}
-                                disabled={isLoading}
-                            >
-                                {tone.charAt(0).toUpperCase() + tone.slice(1)}
+                    {/* AI Çıktı Kartı */}
+                    {(generatedDescription || isGenerating) && (
+                        <div className="bg-blue-50 p-4 rounded-xl shadow-sm space-y-3">
+                            <h2 className="text-gray-900 font-medium text-base">Oluşturulan Ürün Açıklaması</h2>
+                            <textarea ref={descriptionRef} className="w-full bg-white text-gray-800 text-sm leading-relaxed border border-gray-300 rounded-lg px-4 py-2 resize-y" rows={8} value={displayDescription} onChange={(e) => setDisplayDescription(e.target.value)} disabled={isGenerating} />
+                            
+                            {!isGenerating && seoScore && (
+                                <div className="flex justify-between items-center">
+                                    <span className="text-green-500 text-xs font-medium">SEO Skoru: {seoScore}/100</span>
+                                    <button onClick={() => navigator.clipboard.writeText(displayDescription)} className="text-blue-600 text-sm hover:underline">Kopyala</button>
+                                </div>
+                            )}
+
+                            <button type="button" onClick={handleSaveProductAndGoToNextStep} className="w-full bg-green-500 hover:bg-green-600 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50" disabled={isLoading || isGenerating}>
+                               {isLoading ? 'Kaydediliyor...' : 'Ürünü Kaydet ve SSS Adımına Geç'}
                             </button>
-                        ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Adım 2: SSS Ekleme */}
+            <div className={currentStep === 2 ? 'block' : 'hidden'}>
+                 <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-300">
+                    <h3 className="text-lg font-semibold text-gray-900">Ürün: "{productName}"</h3>
+                    <p className="text-sm text-gray-600 mb-4">Bu ürüne sıkça sorulan soruları ve cevaplarını ekleyin.</p>
+
+                    <form onSubmit={handleAddFaq} className="space-y-4">
+                        <div>
+                            <label htmlFor="faqQuestion" className="text-sm text-gray-600">Soru</label>
+                            <input id="faqQuestion" type="text" className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" value={faqQuestion} onChange={(e) => setFaqQuestion(e.target.value)} placeholder="Örn: Garanti süresi ne kadar?"/>
+                        </div>
+                        <div>
+                            <label htmlFor="faqAnswer" className="text-sm text-gray-600">Cevap</label>
+                            <textarea id="faqAnswer" rows={3} className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2 resize-y" value={faqAnswer} onChange={(e) => setFaqAnswer(e.target.value)} placeholder="Örn: Tüm ürünlerimiz 2 yıl garantilidir."/>
+                        </div>
+                        <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50" disabled={isFaqLoading}>
+                            {isFaqLoading ? 'Ekleniyor...' : 'SSS Ekle'}
+                        </button>
+                    </form>
+
+                    {addedFaqs.length > 0 && (
+                        <div className="mt-6 border-t border-gray-200 pt-4">
+                            <h4 className="text-base font-medium text-gray-800 mb-3">Eklenen Sorular</h4>
+                            <ul className="space-y-3">
+                                {addedFaqs.map((faq, index) => (
+                                    <li key={index} className="bg-blue-50 p-3 rounded-lg">
+                                        <p className="font-semibold text-sm text-gray-900">{faq.question}</p>
+                                        <p className="text-sm text-gray-700 mt-1">{faq.answer}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    
+                    <div className="mt-6 border-t border-gray-200 pt-4 flex justify-end">
+                         <button onClick={resetFormAndStartOver} className="bg-gray-800 hover:bg-gray-900 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition">
+                            Tamamla ve Yeni Ürün Ekle
+                        </button>
                     </div>
-                    {!productTone && !isLoading && (
-                        <p className={`text-${errorRed} text-xs mt-1`}>Lütfen bir tonlama seçiniz.</p>
-                    )}
-                </div>
-
-                <div className="flex flex-col gap-1">
-                    <label htmlFor="keywordsInput" className={`text-sm text-${grayText}`}>Anahtar Kelimeler / Kısa Açıklamalar (Virgülle Ayırın)</label>
-                    <textarea
-                        id="keywordsInput"
-                        rows={3}
-                        className={`border border-${borderGray} focus:border-${primaryBlue} focus:ring-${lightBackground} rounded-lg px-4 py-2 text-${darkText} resize-y`}
-                        placeholder="Örn: suya dayanıklı, yüksek ses kalitesi, uzun pil ömrü, taşınabilir"
-                        value={keywordsInput}
-                        onChange={(e) => setKeywordsInput(e.target.value)}
-                        required
-                        disabled={isLoading}
-                    ></textarea>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                    <label htmlFor="productImageUrl" className={`text-sm text-${grayText}`}>Görsel URL (İsteğe Bağlı)</label>
-                    <input
-                        id="productImageUrl"
-                        type="url"
-                        className={`border border-${borderGray} focus:border-${primaryBlue} focus:ring-${lightBackground} rounded-lg px-4 py-2 text-${darkText}`}
-                        placeholder="Örn: https://example.com/resim.jpg"
-                        value={productImageUrl}
-                        onChange={(e) => setProductImageUrl(e.target.value)}
-                        disabled={isLoading}
-                    />
-                </div>
-
-                <div className="flex flex-col gap-1">
-                    <label htmlFor="productPrice" className={`text-sm text-${grayText}`}>Fiyat ($)</label>
-                    <input
-                        id="productPrice"
-                        type="number"
-                        step="0.01"
-                        className={`border border-${borderGray} focus:border-${primaryBlue} focus:ring-${lightBackground} rounded-lg px-4 py-2 text-${darkText}`}
-                        placeholder="Örn: 99.99"
-                        value={productPrice}
-                        onChange={(e) => setProductPrice(e.target.value)}
-                        required
-                        disabled={isLoading}
-                    />
-                </div>
-
-                {/* AI Output Section - Formun içine taşındı */}
-                <div className={`mt-4 pt-4 border-t border-${borderGray} space-y-4`}>
-                    <h2 className={`text-${darkText} font-medium text-base mb-2`}>Ürün Açıklaması</h2>
-                    <textarea
-                        ref={descriptionRef}
-                        className={`w-full bg-white text-${darkText} text-sm leading-relaxed border border-${borderGray} focus:border-${primaryBlue} focus:ring-${lightBackground} rounded-lg px-4 py-2 resize-y overflow-y-auto
-                            ${(isGenerating || isLoading) ? 'opacity-70 cursor-not-allowed' : ''}
-                        `}
-                        rows={6}
-                        // Yazım efekti bitince displayDescription'ı generatedDescription'a eşitle
-                        value={isGenerating ? displayDescription : generatedDescription}
-                        onChange={(e) => {
-                            setGeneratedDescription(e.target.value); // Hem kaydedilecek veriyi güncelle
-                            setDisplayDescription(e.target.value);     // Hem de görünen metni güncelle
-                        }}
-                        disabled={isGenerating || isLoading} // Üretilirken veya genel yüklemede disabled olsun
-                    />
-                    {isGenerating && (
-                        <p className={`text-${grayText} text-sm mt-2`}>Yapay zeka açıklama oluşturuyor...</p>
-                    )}
-
-                    {/* Açıklama Üret Butonu */}
-                <button
-                    type="submit"
-                    className={`w-full bg-${primaryBlue} hover:bg-${primaryHover} text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed`}
-                    disabled={isLoading}
-                >
-                    {isLoading && isGenerating ? (
-                        <>
-                            {/* <Loader2 className="animate-spin inline-block mr-2" size={20} /> */}
-                            Açıklama Üretiliyor...
-                        </>
-                    ) : 'Açıklama Üret'}
-                </button>
-
-                    {/* Sadece yazım efekti bittiğinde ve açıklama varsa göster */}
-                    {generatedDescription && !isGenerating && (
-                        <>
-                            <div className="mt-3 flex justify-between items-center">
-                                {seoScore !== null && (
-                                    <span className={`text-${successGreen} text-xs font-medium`}>SEO Skoru: {seoScore}/100</span>
-                                )}
-                                <button
-                                    type="button"
-                                    onClick={handleCopyDescription}
-                                    className={`text-${primaryBlue} text-sm hover:underline`}
-                                >
-                                    Kopyala
-                                </button>
-                            </div>
-                            <div className="flex gap-4 mt-4">
-                                <button
-                                    type="button"
-                                    onClick={handleSaveProduct}
-                                    className={`flex-1 bg-${primaryBlue} hover:bg-${primaryHover} text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed`}
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? 'Ürün Kaydediliyor...' : 'Ürünü Kaydet'}
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleCancel}
-                                    className={`flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed`}
-                                    disabled={isLoading}
-                                >
-                                    İptal
-                                </button>
-                            </div>
-                        </>
-                    )}
-                </div>
-            </form>
+                 </div>
+            </div>
         </div>
     );
 }
