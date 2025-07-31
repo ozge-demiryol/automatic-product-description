@@ -4,7 +4,7 @@ import { Types } from 'mongoose';
 
 export class ProductRepository implements RepositoryBase<IProduct> {
   async findAll(): Promise<IProduct[]> {
-    return await ProductModel.find().exec();
+    return await ProductModel.find().sort({ createdAt: -1 }).exec();
   }
   async findById(id: Types.ObjectId): Promise<IProduct | null> {
     return await ProductModel.findById(id).exec();

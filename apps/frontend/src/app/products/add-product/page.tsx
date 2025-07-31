@@ -176,7 +176,7 @@ export default function AddProductPage() {
             console.log(res)
             if (!res.ok) throw new Error((await res.json()).message || 'SSS eklenemedi.');
             const newFaq = await res.json();
-            setAddedFaqs(prev => [...prev, { question: newFaq.question, answer: newFaq.answer }]);
+            setAddedFaqs(prev => [...prev, newFaq]);
             setFaqQuestion('');
             setFaqAnswer('');
             setMessage({ type: 'success', text: 'SSS başarıyla eklendi!' });
@@ -212,10 +212,18 @@ export default function AddProductPage() {
                 &larr; Tüm Ürünlere Geri Dön
             </Link>
 
-            <h1 className="text-2xl font-semibold text-gray-900 mb-2">Yeni Ürün Ekle</h1>
-            <p className="text-base text-gray-500 mb-6">
-                Adım {currentStep} / 2: {currentStep === 1 ? 'Ürün Detayları ve Açıklama' : 'Sıkça Sorulan Sorular'}
-            </p>
+            <h1 className="text-2xl font-semibold text-white-900 mb-2">Yeni Ürün Ekle</h1>
+            <div className="mb-8">
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                        className={`bg-blue-600 h-2 rounded-full transition-all duration-500 ease-in-out ${currentStep === 1 ? 'w-1/2' : 'w-full'}`}
+                    ></div>
+                </div>
+                <div className="flex justify-between mt-2 text-sm font-medium">
+                    <span className={currentStep >= 1 ? 'text-blue-600' : 'text-gray-500'}>Ürün Detayları</span>
+                    <span className={currentStep >= 2 ? 'text-blue-600' : 'text-gray-500'}>SSS Ekleme</span>
+                </div>
+            </div>
 
             {message && (
                 <div className={`px-4 py-3 rounded-lg shadow text-sm font-medium mb-4 text-white ${message.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`}>
@@ -230,19 +238,19 @@ export default function AddProductPage() {
                     <div className="grid md:grid-cols-2 gap-4">
                         <div>
                             <label htmlFor="productName" className="text-sm text-gray-600">Ürün Adı</label>
-                            <input id="productName" type="text" className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" placeholder="Örn: Yeni Model Bluetooth Hoparlör" value={productName} onChange={(e) => setProductName(e.target.value)} required />
+                            <input id="productName" type="text" className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" placeholder="Örn: Yeni Model Bluetooth Hoparlör" value={productName} onChange={(e) => setProductName(e.target.value)} required />
                         </div>
                         <div>
                             <label htmlFor="productCategory" className="text-sm text-gray-600">Kategori</label>
-                            <input id="productCategory" type="text" className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" placeholder="Örn: Elektronik" value={productCategory} onChange={(e) => setProductCategory(e.target.value)} required />
+                            <input id="productCategory" type="text" className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" placeholder="Örn: Elektronik" value={productCategory} onChange={(e) => setProductCategory(e.target.value)} required />
                         </div>
                         <div>
                             <label htmlFor="productPrice" className="text-sm text-gray-600">Fiyat (₺)</label>
-                            <input id="productPrice" type="number" step="0.01" className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" placeholder="Örn: 499.90" value={productPrice} onChange={(e) => setProductPrice(e.target.value)} required />
+                            <input id="productPrice" type="number" step="0.01" className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" placeholder="Örn: 499.90" value={productPrice} onChange={(e) => setProductPrice(e.target.value)} required />
                         </div>
                          <div>
                             <label htmlFor="productImageUrl" className="text-sm text-gray-600">Görsel URL (İsteğe Bağlı)</label>
-                            <input id="productImageUrl" type="url" className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" placeholder="https://..." value={productImageUrl} onChange={(e) => setProductImageUrl(e.target.value)} />
+                            <input id="productImageUrl" type="url" className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" placeholder="https://..." value={productImageUrl} onChange={(e) => setProductImageUrl(e.target.value)} />
                         </div>
                     </div>
 
@@ -259,7 +267,7 @@ export default function AddProductPage() {
                     
                     <div>
                         <label htmlFor="keywordsInput" className="text-sm text-gray-600">Anahtar Kelimeler / Kısa Açıklamalar (Virgülle ayırın)</label>
-                        <textarea id="keywordsInput" rows={3} className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2 resize-y" placeholder="suya dayanıklı, yüksek ses kalitesi, uzun pil ömrü" value={keywordsInput} onChange={(e) => setKeywordsInput(e.target.value)} required />
+                        <textarea id="keywordsInput" rows={3} className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2 resize-y" placeholder="suya dayanıklı, yüksek ses kalitesi, uzun pil ömrü" value={keywordsInput} onChange={(e) => setKeywordsInput(e.target.value)} required />
                     </div>
 
                     <button type="button" onClick={handleGenerateDescription} className="w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50" disabled={isLoading}>
@@ -267,21 +275,16 @@ export default function AddProductPage() {
                     </button>
 
                     {/* AI Çıktı Kartı */}
-                    {(generatedDescription || isGenerating) && (
-                        <div className="bg-blue-50 p-4 rounded-xl shadow-sm space-y-3">
-                            <h2 className="text-gray-900 font-medium text-base">Oluşturulan Ürün Açıklaması</h2>
-                            <textarea ref={descriptionRef} className="w-full bg-white text-gray-800 text-sm leading-relaxed border border-gray-300 rounded-lg px-4 py-2 resize-y" rows={8} value={displayDescription} onChange={(e) => setDisplayDescription(e.target.value)} disabled={isGenerating} />
-                            
-                            {!isGenerating && seoScore && (
-                                <div className="flex justify-between items-center">
-                                    <span className="text-green-500 text-xs font-medium">SEO Skoru: {seoScore}/100</span>
-                                    <button onClick={() => navigator.clipboard.writeText(displayDescription)} className="text-blue-600 text-sm hover:underline">Kopyala</button>
-                                </div>
-                            )}
+                    { (
+                        <div className="py-4 space-y-3">
+                            <h2 className="text-gray-900 font-medium text-base">Ürün Açıklaması</h2>
+                            <textarea ref={descriptionRef} className="w-full bg-white text-gray-700 text-sm leading-relaxed border border-gray-300 rounded-lg px-4 py-2 resize-y" rows={8} value={displayDescription} onChange={(e) => setDisplayDescription(e.target.value)} disabled={isGenerating} />
 
-                            <button type="button" onClick={handleSaveProductAndGoToNextStep} className="w-full bg-green-500 hover:bg-green-600 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50" disabled={isLoading || isGenerating}>
-                               {isLoading ? 'Kaydediliyor...' : 'Ürünü Kaydet ve SSS Adımına Geç'}
-                            </button>
+                            {!isGenerating && (
+                                <button type="button" onClick={handleSaveProductAndGoToNextStep} className="w-full bg-green-500 hover:bg-green-600 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50" disabled={isLoading}>
+                                   {isLoading ? 'Kaydediliyor...' : 'Ürünü Kaydet ve SSS Adımına Geç'}
+                                </button>
+                            )}
                         </div>
                     )}
                 </div>
@@ -296,11 +299,11 @@ export default function AddProductPage() {
                     <form onSubmit={handleAddFaq} className="space-y-4">
                         <div>
                             <label htmlFor="faqQuestion" className="text-sm text-gray-600">Soru</label>
-                            <input id="faqQuestion" type="text" className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" value={faqQuestion} onChange={(e) => setFaqQuestion(e.target.value)} placeholder="Örn: Garanti süresi ne kadar?"/>
+                            <input id="faqQuestion" type="text" className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2" value={faqQuestion} onChange={(e) => setFaqQuestion(e.target.value)} placeholder="Örn: Garanti süresi ne kadar?"/>
                         </div>
                         <div>
                             <label htmlFor="faqAnswer" className="text-sm text-gray-600">Cevap</label>
-                            <textarea id="faqAnswer" rows={3} className="w-full mt-1 border-gray-300 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2 resize-y" value={faqAnswer} onChange={(e) => setFaqAnswer(e.target.value)} placeholder="Örn: Tüm ürünlerimiz 2 yıl garantilidir."/>
+                            <textarea id="faqAnswer" rows={3} className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2 resize-y" value={faqAnswer} onChange={(e) => setFaqAnswer(e.target.value)} placeholder="Örn: Tüm ürünlerimiz 2 yıl garantilidir."/>
                         </div>
                         <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50" disabled={isFaqLoading}>
                             {isFaqLoading ? 'Ekleniyor...' : 'SSS Ekle'}
@@ -308,7 +311,7 @@ export default function AddProductPage() {
                     </form>
 
                     {addedFaqs.length > 0 && (
-                        <div className="mt-6 border-t border-gray-200 pt-4">
+                        <div className="mt-6 border-t border-gray-300 pt-4">
                             <h4 className="text-base font-medium text-gray-800 mb-3">Eklenen Sorular</h4>
                             <ul className="space-y-3">
                                 {addedFaqs.map((faq, index) => (
@@ -321,7 +324,7 @@ export default function AddProductPage() {
                         </div>
                     )}
                     
-                    <div className="mt-6 border-t border-gray-200 pt-4 flex justify-end">
+                    <div className="mt-6 border-t border-gray-300 pt-4 flex justify-end">
                          <button onClick={resetFormAndStartOver} className="bg-gray-800 hover:bg-gray-900 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition">
                             Tamamla ve Yeni Ürün Ekle
                         </button>

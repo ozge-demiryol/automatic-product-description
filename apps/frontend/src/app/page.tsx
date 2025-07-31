@@ -1,8 +1,7 @@
-// app/products/page.tsx
 import React from 'react';
-import Link from 'next/link'; // Link bileşenini içeri aktarıyoruz
+import Link from 'next/link';
+import SettingsMenu from '../components/SettingsMenu';
 
-// Varsayımsal bir Ürün Tipi Tanımı
 interface Product {
   _id: string;
   name: string;
@@ -36,9 +35,12 @@ export default async function ProductsPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-semibold text-gray-900 mb-6">
-        Ürün Listesi
-      </h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-semibold text-gray-900">
+          Ürün Listesi
+        </h1>
+        <SettingsMenu />
+      </div>
 
       {products.length === 0 ? (
         <p className="text-gray-500 text-base">Şu anda görüntülenecek ürün bulunmamaktadır.</p>

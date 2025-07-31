@@ -50,7 +50,7 @@ export default async function ProductDetailPage({ params }: { params: { productI
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <Link href="/products" className="text-blue-600 hover:underline mb-6 inline-block text-base font-medium">
+      <Link href="/" className="text-blue-600 hover:underline mb-6 inline-block text-base font-medium">
         &larr; Tüm Ürünlere Geri Dön
       </Link>
 

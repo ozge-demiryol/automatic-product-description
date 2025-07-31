@@ -36,6 +36,6 @@ app.get('/api', (req, res) => {
 app.use('/api/products', productRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/products/:id/faq', faqRoutes);
-app.use('api/brands/:id/', brandRoutes)
+app.use('/api/brands/:id/', brandRoutes)
 
 export default app;
