@@ -8,12 +8,13 @@ export default async function ProductDetailPage({
 }: {
   params: { productId: string };
 }) {
-  const { productId } = params;
+  const { productId } = await params;
 
   let product: FinalProductSave | null = null;
 
   try {
-    const res = await fetch(`api/products/${productId}`, {
+    const apiBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const res = await fetch(`${apiBaseUrl}/api/products/${productId}`, {
       cache: "no-store", // Ensures data is re-fetched on every request
     });
 

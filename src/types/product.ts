@@ -23,11 +23,6 @@ export interface GeneratedDescriptionResponse {
   customerQuestions?: string[];
 }
 
-export interface Faq {
-  question: string;
-  answer: string;
-}
-
 export interface SavedProductResponse {
   _id: string;
 }

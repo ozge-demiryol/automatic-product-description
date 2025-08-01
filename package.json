@@ -12,7 +12,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@headlessui/react": "^2.2.7",
+    "ai": "^5.0.0",
     "dotenv": "^17.2.1",
     "lucide-react": "^0.535.0",
     "mongodb": "^6.18.0",

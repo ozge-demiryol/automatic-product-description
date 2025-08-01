@@ -4,10 +4,10 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   FinalProductSave,
-  Faq,
   GeneratedDescriptionResponse,
   SavedProductResponse,
 } from "@/types/product";
+import { FAQ } from "@/types/faq";
 
 export default function AddProductPage() {
   // Adım yönetimi için state
@@ -23,7 +23,6 @@ export default function AddProductPage() {
 
   const [generatedDescription, setGeneratedDescription] = useState("");
   const [displayDescription, setDisplayDescription] = useState("");
-  const [seoScore, setSeoScore] = useState<number | null>(null);
   const [customerQuestions, setCustomerQuestions] = useState<string[] | null>(
     null
   );
@@ -32,7 +31,7 @@ export default function AddProductPage() {
   const [savedProductId, setSavedProductId] = useState<string | null>(null);
   const [faqQuestion, setFaqQuestion] = useState("");
   const [faqAnswer, setFaqAnswer] = useState("");
-  const [addedFaqs, setAddedFaqs] = useState<Faq[]>([]);
+  const [addedFaqs, setAddedFaqs] = useState<FAQ[]>([]);
   const [isFaqLoading, setIsFaqLoading] = useState(false);
 
   // Genel State'ler
@@ -48,8 +47,6 @@ export default function AddProductPage() {
     .split(",")
     .map((keyword) => keyword.trim())
     .filter((keyword) => keyword.length > 0);
-  const apiBaseUrl =
-    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000/api";
 
   // Yazım efekti
   useEffect(() => {
@@ -92,7 +89,7 @@ export default function AddProductPage() {
     setIsGenerating(true);
 
     try {
-      const res = await fetch(`api/products/generate-description`, {
+      const res = await fetch(`/api/products/generate-description`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -105,7 +102,6 @@ export default function AddProductPage() {
       if (!res.ok) throw new Error((await res.json()).message || "API hatası");
       const data: GeneratedDescriptionResponse = await res.json();
       setGeneratedDescription(data.productDescription);
-      setSeoScore(data.seoScore);
     } catch (error: any) {
       setMessage({
         type: "error",
@@ -144,7 +140,7 @@ export default function AddProductPage() {
     };
 
     try {
-      const res = await fetch(`${apiBaseUrl}/products`, {
+      const res = await fetch(`/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productToSave),
@@ -176,7 +172,7 @@ export default function AddProductPage() {
     setMessage(null);
 
     try {
-      const res = await fetch(`${apiBaseUrl}/products/${savedProductId}/faq`, {
+      const res = await fetch(`/api/products/${savedProductId}/faq`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: faqQuestion, answer: faqAnswer }),
@@ -207,7 +203,6 @@ export default function AddProductPage() {
     setProductPrice("");
     setGeneratedDescription("");
     setDisplayDescription("");
-    setSeoScore(null);
     setSavedProductId(null);
     setFaqQuestion("");
     setFaqAnswer("");
@@ -403,7 +398,7 @@ export default function AddProductPage() {
       <div className={currentStep === 2 ? "block" : "hidden"}>
         <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-300">
           <h3 className="text-lg font-semibold text-gray-900">
-            Ürün: `${productName}`
+            Ürün: {productName}
           </h3>
           <p className="text-sm text-gray-600 mb-4">
             Bu ürüne sıkça sorulan soruları ve cevaplarını ekleyin.

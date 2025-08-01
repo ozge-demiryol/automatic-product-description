@@ -75,4 +75,9 @@ export class MongoDataManager<T extends Document> {
     const result = await db.collection<T>(collectionName).deleteOne(filter);
     return result.deletedCount > 0;
   }
+
+  async aggregate<T extends Document>(collectionName: string, pipeline: Document[]): Promise<T[]> {
+    const db = await connect();
+    return db.collection(collectionName).aggregate<T>(pipeline).toArray();
+  }
 }

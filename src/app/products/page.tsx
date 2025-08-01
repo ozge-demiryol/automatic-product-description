@@ -1,3 +1,4 @@
+// src/app/products/page.tsx
 import React from "react";
 import Link from "next/link";
 import SettingsMenu from "@/app/components/SettingsMenu";
@@ -12,8 +13,9 @@ interface Product {
 
 async function getProducts(): Promise<Product[]> {
   try {
-    const apiBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    const res = await fetch(`${apiBaseUrl}/api/products`, {
+    const apiBaseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/api/";
+    const res = await fetch(`${apiBaseUrl}/products`, {
       cache: "no-store",
     });
 
@@ -48,7 +50,7 @@ export default async function ProductsPage() {
           {products.map((product) => (
             <Link
               key={product._id}
-              href={`products/${product._id}`}
+              href={`/products/${product._id}`}
               className="block"
             >
               {" "}

@@ -28,12 +28,12 @@ export default function SettingsMenu() {
           <Menu.Item>
             {({ active }: { active: boolean }) => (
               <Link
-                href="/add-faq"
+                href="/faq"
                 className={`${
                   active ? 'bg-blue-50 text-blue-700' : 'text-gray-900'
                 } block px-4 py-2 text-sm`}
               >
-                SSS Ekle
+                SSS
               </Link>
             )}
           </Menu.Item>
