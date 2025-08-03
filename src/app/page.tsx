@@ -16,9 +16,9 @@ async function getProducts(): Promise<Product[]> {
     const apiBaseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    
+
     const res = await fetch(new URL("/api/products", apiBaseUrl), {
-      next: { revalidate: 60 },
+      next: { revalidate: 10 },
     });
 
     if (!res.ok) {
