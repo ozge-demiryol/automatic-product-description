@@ -14,8 +14,8 @@ interface Product {
 
 async function getProducts(): Promise<Product[]> {
   try {
-    const res = await fetch("/api/products", {
-      next: { revalidate: 10 },
+    const apiBaseUrl = process.env.VERCEL_URL ? process.env.VERCEL_URL : (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000');
+    const res = await fetch(`${apiBaseUrl}/api/products`, {
       headers: {
         'Content-Type': 'application/json',
       }
