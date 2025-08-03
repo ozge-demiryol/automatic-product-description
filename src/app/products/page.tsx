@@ -1,8 +1,8 @@
-// src/app/products/page.tsx
 import React from "react";
 import Link from "next/link";
 import SettingsMenu from "@/app/components/SettingsMenu";
 
+export const dynamic = 'force-dynamic';
 interface Product {
   _id: string;
   name: string;
@@ -20,7 +20,7 @@ async function getProducts(): Promise<Product[]> {
     console.log(apiBaseUrl);
 
     const res = await fetch(new URL("/api/products", apiBaseUrl), {
-      next: { revalidate: 60 }, // Revalidate every 60 seconds
+      cache: "no-store",
     });
 
     if (!res.ok) {
