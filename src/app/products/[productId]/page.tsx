@@ -10,7 +10,10 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   let product: FinalProductSave | null = null;
 
   try {
-    const apiBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const apiBaseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
     const res = await fetch(`${apiBaseUrl}/api/products/${productId}`, {
       cache: "no-store", // Ensures data is re-fetched on every request
     });

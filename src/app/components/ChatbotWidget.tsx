@@ -22,7 +22,9 @@ export default function ChatbotWidget({ productId, initialMessage, sellerId }: C
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const apiBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const apiBaseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";;
 
   const apiEndpoint = `${apiBaseUrl}/api/chat`;
 
