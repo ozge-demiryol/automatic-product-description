@@ -17,9 +17,7 @@ async function getProducts(): Promise<Product[]> {
     ? `https://${process.env.VERCEL_URL}`
     : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    const res = await fetch(new URL("/api/products", apiBaseUrl), {
-      next: { revalidate: 10 },
-    });
+    const res = await fetch("/api/products");
 
     if (!res.ok) {
       console.error(`Ürünler yüklenirken bir hata oluştu: ${res.statusText}`);
