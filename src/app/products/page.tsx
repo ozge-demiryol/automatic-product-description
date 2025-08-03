@@ -1,8 +1,8 @@
+// src/app/products/page.tsx
 import React from "react";
 import Link from "next/link";
 import SettingsMenu from "@/app/components/SettingsMenu";
 
-export const dynamic = 'force-dynamic';
 interface Product {
   _id: string;
   name: string;
@@ -17,9 +17,7 @@ async function getProducts(): Promise<Product[]> {
       ? `https://${process.env.VERCEL_URL}`
       : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    console.log(apiBaseUrl);
-
-    const res = await fetch(new URL("/api/products", apiBaseUrl), {
+    const res = await fetch(`${apiBaseUrl}/api/products`, {
       cache: "no-store",
     });
 
