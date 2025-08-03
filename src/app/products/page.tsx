@@ -14,7 +14,7 @@ interface Product {
 
 async function getProducts(): Promise<Product[]> {
   try {
-    const apiBaseUrl = process.env.VERCEL_URL ? process.env.VERCEL_URL : (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000');
+    const apiBaseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000');
     const res = await fetch(`${apiBaseUrl}/api/products`, {
       headers: {
         'Content-Type': 'application/json',
@@ -57,11 +57,11 @@ export default async function ProductsPage() {
             >
               {" "}
               {/* */}
-              <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-300 hover:shadow-md transition-shadow cursor-pointer">
-                <h2 className="text-base font-medium text-gray-900 mb-2">
+              <div className="bg-gray-900 rounded-xl shadow-sm p-4 border border-gray-800 hover:shadow-md transition-shadow cursor-pointer">
+                <h2 className="text-base font-medium text-gray-100 mb-2">
                   {product.name}
                 </h2>
-                <p className="text-sm text-gray-800 leading-relaxed mb-3 line-clamp-3">
+                <p className="text-sm text-gray-200 leading-relaxed mb-3 line-clamp-3">
                   {product.description}
                 </p>
                 <div className="flex justify-between items-center">

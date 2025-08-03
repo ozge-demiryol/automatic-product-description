@@ -93,7 +93,7 @@ export default function ChatbotWidget({ productId, initialMessage, sellerId }: C
       )}
 
       {isOpen && (
-        <div className="bg-white rounded-xl shadow-xl flex flex-col w-80 md:w-96 h-[400px] border border-gray-300">
+        <div className="bg-gray-900 rounded-xl shadow-xl flex flex-col w-80 md:w-96 h-[400px] border border-gray-800">
           <div className="bg-blue-600 text-white p-3 flex justify-between items-center rounded-t-xl">
             <h3 className="font-semibold text-lg">Ürün Asistanı</h3>
             <button
@@ -108,7 +108,7 @@ export default function ChatbotWidget({ productId, initialMessage, sellerId }: C
           <div className="flex-1 overflow-y-auto p-4 space-y-4 text-sm scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
             {messages.length === 0 && initialMessage ? (
               <div className="flex justify-start">
-                <div className="max-w-[75%] p-3 rounded-lg shadow-sm bg-gray-100 text-gray-800 text-sm leading-relaxed">
+                <div className="max-w-[75%] p-3 rounded-lg shadow-sm bg-gray-800 text-gray-100 text-sm leading-relaxed">
                   <p className="whitespace-pre-wrap">{initialMessage}</p>
                 </div>
               </div>
@@ -121,8 +121,8 @@ export default function ChatbotWidget({ productId, initialMessage, sellerId }: C
                 >
                   <div
                     className={`max-w-[75%] p-3 rounded-lg shadow-sm ${m.role === 'user'
-                      ? 'bg-blue-50 text-gray-900'
-                      : 'bg-gray-100 text-gray-800'
+                      ? 'bg-blue-100 text-gray-900'
+                      : 'bg-gray-800 text-gray-200'
                       } text-sm leading-relaxed`}
                   >
                     <p className="whitespace-pre-wrap">{m.content}</p>
@@ -144,9 +144,9 @@ export default function ChatbotWidget({ productId, initialMessage, sellerId }: C
             )}
           </div>
 
-          <form onSubmit={handleSubmit} className="p-4 border-t border-gray-300 flex items-center">
+          <form onSubmit={handleSubmit} className="p-4 border-t border-gray-700 flex items-center">
             <input
-              className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100 text-gray-900 text-sm"
+              className="flex-1 p-2 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100 text-gray-200 text-sm"
               value={input}
               placeholder="Sorunuzu yazın..."
               onChange={(e) => setInput(e.target.value)}
