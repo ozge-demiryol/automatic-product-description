@@ -4,11 +4,7 @@ import ChatbotWidget from "@/app/components/ChatbotWidget";
 import { FinalProductSave } from "@/types/product";
 import Image from "next/image";
 
-export default async function ProductDetailPage({
-  params,
-}: {
-  params: { productId: string };
-}) {
+export default async function ProductDetailPage({ params }: { params: Promise<{ productId: string }> }) {
   const { productId } = await params;
 
   let product: FinalProductSave | null = null;
