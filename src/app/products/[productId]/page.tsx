@@ -63,7 +63,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         &larr; Tüm Ürünlere Geri Dön
       </Link>
 
-      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-300">
+      <div className="bg-gray-900 rounded-xl shadow-lg p-6 border border-gray-800">
         {product.imageUrl && (
           <Image
             src={product.imageUrl}
@@ -72,13 +72,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           />
         )}
 
-        <h1 className="text-2xl font-semibold text-gray-900 mb-3">
+        <h1 className="text-2xl font-semibold text-gray-100 mb-3">
           {product.name}
         </h1>
         <p className="text-xl font-medium text-blue-600 mb-4">
           ${product.price?.toFixed(2)}
         </p>
-        <p className="text-base text-gray-800 leading-relaxed mb-6">
+        <p className="text-base text-gray-200 leading-relaxed mb-6">
           {product.description}
         </p>
 
