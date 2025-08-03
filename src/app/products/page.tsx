@@ -17,8 +17,10 @@ async function getProducts(): Promise<Product[]> {
       ? `https://${process.env.VERCEL_URL}`
       : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
+    console.log(apiBaseUrl);
+
     const res = await fetch(new URL("/api/products", apiBaseUrl), {
-      cache: "no-store",
+      next: { revalidate: 60 }, // Revalidate every 60 seconds
     });
 
     if (!res.ok) {

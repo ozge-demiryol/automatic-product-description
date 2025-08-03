@@ -17,7 +17,7 @@ async function getProducts(): Promise<Product[]> {
     : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
     
     const res = await fetch(new URL("/api/products", apiBaseUrl), {
-      cache: "no-store",
+      next: { revalidate: 60 },
     });
 
     if (!res.ok) {
