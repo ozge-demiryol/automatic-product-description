@@ -3,17 +3,15 @@ import { ProductService } from "@/app/api/services/productService";
 
 const productService = new ProductService();
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const resolvedParams = await params; // burada await ettik
+export async function GET( request: NextRequest, { params }: { params: Promise<{ id: string }> }) 
+{
+  const { id } = await params;
 
-  const product = await productService.getProductById(resolvedParams.id);
+  const product = await productService.getProductById(id);
 
   if (!product) {
     return NextResponse.json(
-      { message: `Product with id '${resolvedParams.id}' not found` },
+      { message: `Product with id '${id}' not found` },
       { status: 404 }
     );
   }
