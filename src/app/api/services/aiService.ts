@@ -1,4 +1,4 @@
-import { ProductDescriptionRequest } from '@/types/ProductDescriptionRequest';
+import { ProductDescriptionRequest } from '@/types/productDescriptionRequest';
 import { ChatSession, GoogleGenerativeAI, StartChatParams } from '@google/generative-ai';
 import dotenv from 'dotenv';
 dotenv.config();

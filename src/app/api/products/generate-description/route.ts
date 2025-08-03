@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AIService } from '@/app/api/services/aiService';
-import { ProductDescriptionRequest } from '@/types/ProductDescriptionRequest';
+import { ProductDescriptionRequest } from '@/types/productDescriptionRequest';
 
 export async function POST(req: NextRequest) {
     try {
