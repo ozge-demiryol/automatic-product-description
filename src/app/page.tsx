@@ -14,10 +14,12 @@ interface Product {
 async function getProducts(): Promise<Product[]> {
   try {
     const apiBaseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+        ? `https://${process.env.VERCEL_URL}`
+        : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    const res = await fetch("/api/products");
+    const res = await fetch(`${apiBaseUrl}/api/products`, {
+      next: { revalidate: 10 },
+    });
 
     if (!res.ok) {
       console.error(`Ürünler yüklenirken bir hata oluştu: ${res.statusText}`);
