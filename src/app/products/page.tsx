@@ -16,6 +16,9 @@ async function getProducts(): Promise<Product[]> {
   try {
     const res = await fetch("/api/products", {
       next: { revalidate: 10 },
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
 
     if (!res.ok) {
