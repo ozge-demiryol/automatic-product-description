@@ -3,9 +3,9 @@ import { FaqService } from '@/app/api/services/faqService';
 import { AIService } from '@/app/api/services/aiService';
 import { ObjectId } from 'mongodb';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const faqService = new FaqService();
         const faqs = await faqService.getFaqsByProductId(id);
         return NextResponse.json(faqs);
@@ -15,9 +15,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const { question, answer } = await req.json();
 
         if (!question || !answer) {
@@ -46,9 +46,9 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const { question, answer } = await req.json();
 
         if (!question && !answer) {

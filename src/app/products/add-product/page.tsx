@@ -23,9 +23,7 @@ export default function AddProductPage() {
 
   const [generatedDescription, setGeneratedDescription] = useState("");
   const [displayDescription, setDisplayDescription] = useState("");
-  const [customerQuestions, setCustomerQuestions] = useState<string[] | null>(
-    null
-  );
+
 
   // 2. Adım State'leri (SSS)
   const [savedProductId, setSavedProductId] = useState<string | null>(null);
@@ -102,10 +100,10 @@ export default function AddProductPage() {
       if (!res.ok) throw new Error((await res.json()).message || "API hatası");
       const data: GeneratedDescriptionResponse = await res.json();
       setGeneratedDescription(data.productDescription);
-    } catch (error: any) {
+    } catch (error) {
       setMessage({
         type: "error",
-        text: `Açıklama üretilemedi: ${error.message}`,
+        text: `Açıklama üretilemedi: ${error}`,
       });
       setIsGenerating(false);
     } finally {
@@ -154,10 +152,10 @@ export default function AddProductPage() {
         text: "Ürün başarıyla kaydedildi! Şimdi SSS ekleyebilirsiniz.",
       });
       setCurrentStep(2); // Sonraki adıma geç
-    } catch (error: any) {
+    } catch (error) {
       setMessage({
         type: "error",
-        text: `Ürün kaydedilemedi: ${error.message}`,
+        text: `Ürün kaydedilemedi: ${error}`,
       });
     } finally {
       setIsLoading(false);
@@ -186,8 +184,8 @@ export default function AddProductPage() {
       setFaqQuestion("");
       setFaqAnswer("");
       setMessage({ type: "success", text: "SSS başarıyla eklendi!" });
-    } catch (error: any) {
-      setMessage({ type: "error", text: `SSS eklenemedi: ${error.message}` });
+    } catch (error) {
+      setMessage({ type: "error", text: `SSS eklenemedi: ${error}` });
     } finally {
       setIsFaqLoading(false);
     }

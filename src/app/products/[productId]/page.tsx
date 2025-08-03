@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import ChatbotWidget from "@/app/components/ChatbotWidget";
 import { FinalProductSave } from "@/types/product";
+import Image from "next/image";
 
 export default async function ProductDetailPage({
   params,
@@ -65,7 +66,7 @@ export default async function ProductDetailPage({
 
       <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-300">
         {product.imageUrl && (
-          <img
+          <Image
             src={product.imageUrl}
             alt={product.name}
             className="w-full h-64 object-cover rounded-lg mb-6 shadow-sm"

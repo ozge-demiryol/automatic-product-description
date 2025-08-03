@@ -1,7 +1,6 @@
 import {
   MongoClient,
   Db,
-  Collection,
   Filter,
   Document,
   OptionalUnlessRequiredId,

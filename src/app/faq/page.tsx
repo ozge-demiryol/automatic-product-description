@@ -99,7 +99,7 @@ export default function FaqPage() {
               {selectedProduct ? (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-semibold mb-4 text-gray-400">SSS'leri Yönet</h2>
+                    <h2 className="text-2xl font-semibold mb-4 text-gray-400">SSSleri Yönet</h2>
                     <div className="p-6 rounded-lg shadow space-y-4">
                       {faqs.length === 0 ? (
                         <p className="text-gray-500">Bu ürün için henüz SSS bulunmamaktadır.</p>
@@ -187,7 +187,7 @@ export default function FaqPage() {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <p className="text-lg text-gray-500">SSS'leri görmek için lütfen bir ürün seçin.</p>
+                  <p className="text-lg text-gray-500">SSSleri görmek için lütfen bir ürün seçin.</p>
                 </div>
               )}
             </div>

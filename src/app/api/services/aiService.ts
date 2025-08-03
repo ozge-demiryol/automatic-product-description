@@ -1,5 +1,5 @@
 import { ProductDescriptionRequest } from '@/types/ProductDescriptionRequest';
-import { ChatSession, GoogleGenerativeAI } from '@google/generative-ai';
+import { ChatSession, GoogleGenerativeAI, StartChatParams } from '@google/generative-ai';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -16,7 +16,7 @@ export class AIService {
         this.genAI = new GoogleGenerativeAI(apiKey);
     }
 
-    startChat(chatConfig: any): ChatSession {
+    startChat(chatConfig: StartChatParams): ChatSession {
         const model = this.genAI.getGenerativeModel({ model: this.model });
         return model.startChat(chatConfig);
 
@@ -66,26 +66,3 @@ export class AIService {
         }
     }
 }
-
-//     private model: any = 'gemini-2.5-flash';
-//     private apiKey: string;
-
-//     constructor(apiKey: string) {
-//         this.apiKey = apiKey;
-//         const genAI = new GoogleGenerativeAI(this.apiKey);
-//         this.model = genAI.getGenerativeModel({ model: this.model });
-//     }
-//     async generateProductDescription(tone: string): Promise<string> {
-//         const prompt = `${tone}`;
-
-//         try {
-//             const result = await this.model.generateContent(prompt);
-//             const response = await result.response;
-//             const summary = response.text();
-//             return summary;
-//         } catch (error: unknown) {
-//             const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-//             throw new Error(`Gemini product description generation failed: ${errorMessage}`);
-//         }
-//     }
-// } 

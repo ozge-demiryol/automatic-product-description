@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
         const aiService = new AIService();
 
         console.log("Ürün açıklaması Gemini AI ile oluşturuluyor...");
-        let productDescriptionRequest: ProductDescriptionRequest = {
+        const productDescriptionRequest: ProductDescriptionRequest = {
             productName: payload.name,
             category: payload.category,
             keywords: payload.keywords,
