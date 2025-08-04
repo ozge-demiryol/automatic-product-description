@@ -1,53 +1,64 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Chatbot from "@/app/components/ChatbotWidget";
 import { FinalProductSave } from "@/types/product";
+import { useParams } from "next/navigation";
 
-export default async function ProductDetailPage({
-  params,
-}: {
-  params: Promise<{ productId: string }>;
-}) {
-  const { productId } = await params;
+export default function ProductDetailPage() {
+  const params = useParams();
+  const productId = params?.productId as string;
 
-  let product: FinalProductSave | null = null;
+  const [product, setProduct] = useState<FinalProductSave | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  try {
+  useEffect(() => {
+    if (!productId) return;
 
-    const res = await fetch(`/api/products/${productId}`, {
-      cache: "no-store",
-    });
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`/api/products/${productId}`, {
+          cache: "no-store",
+        });
 
-    if (!res.ok) {
-      if (res.status === 404) {
-        console.warn(`Ürün bulunamadı: ${productId}`);
-      } else {
-        throw new Error(
-          `Ürün detayları yüklenirken bir hata oluştu: ${res.statusText}`
-        );
+        if (!res.ok) {
+          if (res.status === 404) {
+            setError("Ürün bulunamadı.");
+          } else {
+            throw new Error(`Hata: ${res.statusText}`);
+          }
+        } else {
+          const data = await res.json();
+          setProduct(data);
+        }
+      } catch (err) {
+        console.error("Veri çekme hatası:", err);
+        setError("Bir hata oluştu. Lütfen daha sonra tekrar deneyin.");
       }
-    } else {
-      product = await res.json();
-    }
-  } catch (error) {
-    console.error(`Ürün detayları çekilirken hata oluştu:`, error);
-  }
+    };
 
-  if (!product) {
+    fetchProduct();
+  }, [productId]);
+
+  if (error) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-8 text-center">
-        <h1 className="text-xl font-semibold text-gray-900 mb-4">
-          Ürün bulunamadı.
-        </h1>
-        <p className="text-base text-gray-500 mb-6">
-          Aradığınız ürün mevcut olmayabilir veya bir hata oluştu.
-        </p>
+        <h1 className="text-xl font-semibold text-gray-900 mb-4">{error}</h1>
         <Link
           href="/"
           className="text-blue-600 hover:underline text-base font-medium"
         >
           &larr; Tüm Ürünlere Geri Dön
         </Link>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-8 text-center">
+        <p className="text-gray-600 text-lg">Yükleniyor...</p>
       </div>
     );
   }
@@ -64,7 +75,6 @@ export default async function ProductDetailPage({
       </Link>
 
       <div className="flex flex-col md:flex-row gap-6 h-full">
-        {/* Ürün Bilgisi - Sol sütun */}
         <div className="md:w-1/2 bg-white rounded-xl shadow-lg p-6 border border-gray-300 flex flex-col">
           <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-3">
             {product.name}
@@ -86,7 +96,6 @@ export default async function ProductDetailPage({
           </button>
         </div>
 
-        {/* Chat Alanı - Sağ sütun */}
         <div className="md:w-1/2 bg-white rounded-xl shadow-lg border border-gray-300 p-4 flex flex-col min-h-[500px] max-h-[700px]">
           <Chatbot productId={productId} initialMessage={initialBotMessage} />
         </div>

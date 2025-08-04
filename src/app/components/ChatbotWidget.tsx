@@ -25,11 +25,7 @@ export default function Chatbot({
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const apiBaseUrl = process.env.VERCEL_URL
-    ? process.env.VERCEL_URL
-    : process.env.NEXT_PUBLIC_BASE_URL;
-
-  const apiEndpoint = `${apiBaseUrl}/api/chat`;
+  const apiEndpoint = `/api/chat`;
 
   // Mesajlar güncellenince scroll otomatik en alta
   useEffect(() => {
