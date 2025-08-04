@@ -68,7 +68,7 @@ export default async function ProductDetailPage({
 
       <div className="flex flex-col md:flex-row gap-6 h-full">
         {/* Ürün Bilgisi - Sol sütun */}
-        <div className="md:w-1/3 bg-white rounded-xl shadow-lg p-6 border border-gray-300 flex flex-col">
+        <div className="md:w-1/2 bg-white rounded-xl shadow-lg p-6 border border-gray-300 flex flex-col">
           <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-3">
             {product.name}
           </h1>
@@ -90,7 +90,7 @@ export default async function ProductDetailPage({
         </div>
 
         {/* Chat Alanı - Sağ sütun */}
-        <div className="md:w-2/3 bg-white rounded-xl shadow-lg border border-gray-300 p-4 flex flex-col min-h-[500px] max-h-[700px]">
+        <div className="md:w-1/2 bg-white rounded-xl shadow-lg border border-gray-300 p-4 flex flex-col min-h-[500px] max-h-[700px]">
           <Chatbot productId={productId} initialMessage={initialBotMessage} />
         </div>
       </div>
