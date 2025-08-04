@@ -16,13 +16,14 @@ async function getProducts(): Promise<Product[]> {
     const apiBaseUrl = process.env.VERCEL_URL
       ? process.env.VERCEL_URL
       : process.env.NEXT_PUBLIC_API_BASE_URL;
+    console.log(apiBaseUrl);
     const res = await fetch(`${apiBaseUrl}/api/products`, {
       headers: {
         "Content-Type": "application/json",
       },
     });
+    console.log(res);
 
-    console.log(res)
     if (!res.ok) {
       console.error(`Ürünler yüklenirken bir hata oluştu: ${res.statusText}`);
     }
