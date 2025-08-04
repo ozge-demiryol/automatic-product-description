@@ -6,54 +6,56 @@ import Chatbot from "@/app/components/ChatbotWidget";
 import { FinalProductSave } from "@/types/product";
 import { useParams } from "next/navigation";
 
+async function getProductById(
+  productId: string
+): Promise<FinalProductSave | null> {
+  try {
+    const res = await fetch(`/api/products/${productId}`, {
+      cache: "no-store",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!res.ok) {
+      if (res.status === 404) {
+        console.warn(`Ürün bulunamadı: ${productId}`);
+        return null;
+      } else {
+        throw new Error(`Ürün detayları yüklenirken hata: ${res.statusText}`);
+      }
+    }
+
+    const product: FinalProductSave = await res.json();
+    return product;
+  } catch (error) {
+    console.error("Ürün çekilirken hata oluştu:", error);
+    return null;
+  }
+}
+
 export default function ProductDetailPage() {
-  const params = useParams();
-  const productId = params?.productId as string;
+  const { productId } = useParams() as { productId: string };
 
   const [product, setProduct] = useState<FinalProductSave | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!productId) return;
 
-    const fetchProduct = async () => {
-      try {
-        const res = await fetch(`/api/products/${productId}`, {
-          cache: "no-store",
-        });
+    const fetchData = async () => {
+      const result = await getProductById(productId);
 
-        if (!res.ok) {
-          if (res.status === 404) {
-            setError("Ürün bulunamadı.");
-          } else {
-            throw new Error(`Hata: ${res.statusText}`);
-          }
-        } else {
-          const data = await res.json();
-          setProduct(data);
-        }
-      } catch (err) {
-        console.error("Veri çekme hatası:", err);
-        setError("Bir hata oluştu. Lütfen daha sonra tekrar deneyin.");
+      if (!result) {
+        setError("Ürün bulunamadı veya bir hata oluştu.");
+      } else {
+        setProduct(result);
       }
+
+      setLoading(false);
     };
 
-    fetchProduct();
+    fetchData();
   }, [productId]);
-
-  if (error) {
-    return (
-      <div className="max-w-3xl mx-auto px-4 py-8 text-center">
-        <h1 className="text-xl font-semibold text-gray-900 mb-4">{error}</h1>
-        <Link
-          href="/"
-          className="text-blue-600 hover:underline text-base font-medium"
-        >
-          &larr; Tüm Ürünlere Geri Dön
-        </Link>
-      </div>
-    );
-  }
 
   if (!product) {
     return (
