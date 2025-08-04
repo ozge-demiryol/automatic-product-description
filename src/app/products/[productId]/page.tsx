@@ -1,11 +1,14 @@
 import React from "react";
 import Link from "next/link";
-import ChatbotWidget from "@/app/components/ChatbotWidget";
+import Chatbot from "@/app/components/ChatbotWidget";
 import { FinalProductSave } from "@/types/product";
-import Image from "next/image";
 
-export default async function ProductDetailPage({ params }: { params: Promise<{ productId: string }> }) {
-  const { productId } = await params;
+export default async function ProductDetailPage({
+  params,
+}: {
+  params: { productId: string };
+}) {
+  const { productId } = params;
 
   let product: FinalProductSave | null = null;
 
@@ -15,7 +18,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
     const res = await fetch(`${apiBaseUrl}/api/products/${productId}`, {
-      cache: "no-store", // Ensures data is re-fetched on every request
+      cache: "no-store",
     });
 
     if (!res.ok) {
@@ -55,38 +58,42 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const initialBotMessage = `Merhaba! Bu ${product.name} ürünü hakkında size nasıl yardımcı olabilirim?`;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-8 min-h-[80vh] flex flex-col gap-4">
       <Link
-        href="/"
-        className="text-blue-600 hover:underline mb-6 inline-block text-base font-medium"
+        href="/products"
+        className="text-blue-600 hover:underline mb-4 text-base font-medium"
       >
         &larr; Tüm Ürünlere Geri Dön
       </Link>
 
-      <div className="bg-gray-900 rounded-xl shadow-lg p-6 border border-gray-800">
-        {product.imageUrl && (
-          <Image
-            src={product.imageUrl}
-            alt={product.name}
-            className="w-full h-64 object-cover rounded-lg mb-6 shadow-sm"
-          />
-        )}
+      <div className="flex flex-col md:flex-row gap-6 h-full">
+        {/* Ürün Bilgisi - Sol sütun */}
+        <div className="md:w-1/2 bg-white rounded-xl shadow-lg p-6 border border-gray-300 flex flex-col">
+          <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-3">
+            {product.name}
+          </h1>
 
-        <h1 className="text-2xl font-semibold text-gray-100 mb-3">
-          {product.name}
-        </h1>
-        <p className="text-xl font-medium text-blue-600 mb-4">
-          ${product.price?.toFixed(2)}
-        </p>
-        <p className="text-base text-gray-200 leading-relaxed mb-6">
-          {product.description}
-        </p>
+          <p className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-semibold mb-4 text-lg w-fit">
+            ${product.price?.toFixed(2)}
+          </p>
 
-        <button className="bg-blue-600 hover:bg-blue-700 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition">
-          Sepete Ekle
-        </button>
+          <p
+            className="text-gray-800 leading-relaxed text-sm md:text-base flex-grow overflow-auto"
+            style={{ maxHeight: "300px" }}
+          >
+            {product.description}
+          </p>
+
+          <button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white text-base font-medium px-6 py-3 rounded-lg shadow-sm transition w-full">
+            Sepete Ekle
+          </button>
+        </div>
+
+        {/* Chat Alanı - Sağ sütun */}
+        <div className="md:w-1/2 bg-white rounded-xl shadow-lg border border-gray-300 p-4 flex flex-col min-h-[500px] max-h-[700px]">
+          <Chatbot productId={productId} initialMessage={initialBotMessage} />
+        </div>
       </div>
-      <ChatbotWidget productId={productId} initialMessage={initialBotMessage} />
     </div>
   );
 }
