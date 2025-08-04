@@ -21,6 +21,7 @@ async function getProducts(): Promise<Product[]> {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
     });
     console.log(res);
 
