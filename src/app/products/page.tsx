@@ -22,6 +22,7 @@ async function getProducts(): Promise<Product[]> {
       },
     });
 
+    console.log(res)
     if (!res.ok) {
       console.error(`Ürünler yüklenirken bir hata oluştu: ${res.statusText}`);
     }
