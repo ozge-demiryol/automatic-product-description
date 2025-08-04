@@ -6,7 +6,7 @@ import { FaShoppingBasket } from "react-icons/fa";
 import { MdPostAdd } from "react-icons/md";
 import type { MouseEvent } from "react";
 
-export default function HomePage(): JSX.Element {
+export default function HomePage() {
   const router = useRouter();
 
   const handleCustomerClick = (e: MouseEvent<HTMLButtonElement>) => {
