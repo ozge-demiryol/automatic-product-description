@@ -27,7 +27,7 @@ export default function Chatbot({
 
   const apiBaseUrl = process.env.VERCEL_URL
     ? process.env.VERCEL_URL
-    : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    : process.env.NEXT_PUBLIC_BASE_URL;
 
   const apiEndpoint = `${apiBaseUrl}/api/chat`;
 

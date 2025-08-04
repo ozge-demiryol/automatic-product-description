@@ -13,9 +13,6 @@ export default async function ProductDetailPage({
   let product: FinalProductSave | null = null;
 
   try {
-    const apiBaseUrl = process.env.VERCEL_URL
-      ? process.env.VERCEL_URL
-      : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
     const res = await fetch(`/api/products/${productId}`, {
       cache: "no-store",
