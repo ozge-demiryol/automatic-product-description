@@ -1,6 +1,8 @@
 import React from "react";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 interface Product {
   _id: string;
   name: string;
@@ -11,12 +13,11 @@ interface Product {
 
 async function getProducts(): Promise<Product[]> {
   try {
-    const apiBaseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
+    const apiBaseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000');
     const res = await fetch(`${apiBaseUrl}/api/products`, {
-      cache: "no-store",
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
 
     if (!res.ok) {

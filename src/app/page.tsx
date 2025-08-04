@@ -2,6 +2,7 @@
 // import Link from "next/link";
 // import SettingsMenu from "@/app/components/SettingsMenu";
 
+export const dynamic = 'force-dynamic';
 // interface Product {
 //   _id: string;
 //   name: string;

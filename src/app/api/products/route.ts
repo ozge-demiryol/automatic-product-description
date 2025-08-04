@@ -6,6 +6,7 @@ const productService = new ProductService();
 
 export async function GET(request: NextRequest) {
   const products = await productService.getAllProducts();
+  console.log("Dönen ürün sayısı:", products.length);
   return NextResponse.json(products);
 }
 
