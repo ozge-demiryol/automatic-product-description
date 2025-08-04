@@ -6,9 +6,9 @@ import { FinalProductSave } from "@/types/product";
 export default async function ProductDetailPage({
   params,
 }: {
-  params: { productId: string };
+  params: Promise<{ productId: string }>;
 }) {
-  const { productId } = params;
+  const { productId } = await params;
 
   let product: FinalProductSave | null = null;
 
