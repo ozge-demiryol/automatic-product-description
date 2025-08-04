@@ -1,7 +1,7 @@
-import React from "react";
-import Link from "next/link";
+"use client";
 
-export const dynamic = "force-dynamic";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface Product {
   _id: string;
@@ -13,20 +13,13 @@ interface Product {
 
 async function getProducts(): Promise<Product[]> {
   try {
-    const apiBaseUrl = process.env.VERCEL_URL
-      ? process.env.VERCEL_URL
-      : process.env.NEXT_PUBLIC_API_BASE_URL;
-    console.log(apiBaseUrl);
-    const res = await fetch(`${apiBaseUrl}/api/products`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
+    const res = await fetch("/api/products", {
+      headers: { "Content-Type": "application/json" },
     });
-    console.log(res);
 
     if (!res.ok) {
-      console.error(`Ürünler yüklenirken bir hata oluştu: ${res.statusText}`);
+      console.error(`Ürünler yüklenirken hata oluştu: ${res.statusText}`);
+      return [];
     }
 
     const products: Product[] = await res.json();
@@ -37,8 +30,28 @@ async function getProducts(): Promise<Product[]> {
   }
 }
 
-export default async function ProductsPage() {
-  const products = await getProducts();
+export default function ProductsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const data = await getProducts();
+      setProducts(data);
+      setLoading(false);
+    };
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8 relative">
+        <p className="text-center text-gray-500 text-base mt-20">
+          Yükleniyor...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 relative">
