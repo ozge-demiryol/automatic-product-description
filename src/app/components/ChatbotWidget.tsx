@@ -29,7 +29,7 @@ export default function Chatbot({
 
   // Mesajlar güncellenince scroll otomatik en alta
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages]);
 
   // İlk açılışta başlangıç mesajı ekle
@@ -96,14 +96,14 @@ export default function Chatbot({
   return (
     <section
       aria-label="Ürün chat asistanı"
-      className="flex flex-col bg-white rounded-xl shadow-lg border border-gray-300 p-4 max-h-[600px] md:max-h-[700px] overflow-hidden"
+      className="flex flex-col bg-gray-900 rounded-xl shadow-lg border border-gray-700 p-4 max-h-[600px] md:max-h-[700px] overflow-hidden"
     >
-      <h2 className="text-xl font-semibold mb-4 text-gray-900">
+      <h2 className="text-xl font-semibold mb-4 text-gray-200">
         Ürün Asistanı
       </h2>
 
       <div
-        className="flex-1 overflow-y-auto mb-4 space-y-4 px-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+        className="flex-1 overflow-y-auto mb-4 space-y-4 px-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-600"
         role="log"
         aria-live="polite"
         aria-relevant="additions"
@@ -114,16 +114,14 @@ export default function Chatbot({
           messages.map((m) => (
             <div
               key={m.id}
-              className={`flex ${
-                m.role === "user" ? "justify-end" : "justify-start"
-              }`}
+              className={`flex ${m.role === "user" ? "justify-end" : "justify-start"
+                }`}
             >
               <div
-                className={`max-w-[75%] p-3 rounded-lg shadow-sm ${
-                  m.role === "user"
-                    ? "bg-blue-50 text-gray-900"
-                    : "bg-gray-100 text-gray-800"
-                } text-sm leading-relaxed break-words whitespace-pre-wrap`}
+                className={`max-w-[75%] p-3 rounded-lg shadow-sm ${m.role === "user"
+                  ? "bg-cyan-100 text-gray-900"
+                  : "bg-gray-700 text-gray-200"
+                  } text-sm leading-relaxed break-words whitespace-pre-wrap`}
               >
                 {m.content}
               </div>
@@ -150,12 +148,12 @@ export default function Chatbot({
 
       <form
         onSubmit={handleSubmit}
-        className="flex items-center gap-2 border-t border-gray-300 pt-2"
+        className="flex items-center gap-2 border-t border-gray-700 pt-2"
         aria-label="Chat mesaj gönderme formu"
       >
         <input
           type="text"
-          className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100 text-gray-900 text-sm"
+          className="flex-1 p-2 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-100 text-gray-200 text-sm"
           placeholder="Sorunuzu yazın..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -166,7 +164,7 @@ export default function Chatbot({
         />
         <button
           type="submit"
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-base font-medium rounded-lg shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-5 py-2.5 bg-cyan-600 hover:bg-blue-700 text-white text-base font-medium rounded-lg shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={isLoading || !input.trim()}
           aria-disabled={isLoading || !input.trim()}
           aria-label="Mesaj gönder"

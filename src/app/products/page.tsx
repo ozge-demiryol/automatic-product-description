@@ -69,21 +69,21 @@ export default function ProductsPage() {
             <Link
               key={product._id}
               href={`/products/${product._id}`}
-              className="block focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-xl"
+              className="block focus:outline-none focus:ring-2 focus:ring-cyan-400 rounded-xl"
             >
-              <div className="bg-white rounded-xl shadow-md p-4 border border-gray-200 hover:shadow-xl hover:scale-[1.03] transition-transform duration-300 cursor-pointer flex flex-col h-full">
-                <h2 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+              <div className="bg-gray-900 rounded-xl shadow-md p-4 border border-gray-800 hover:shadow-xl hover:scale-[1.03] transition-transform duration-300 cursor-pointer flex flex-col h-full">
+                <h2 className="text-lg font-semibold text-gray-200 mb-2 line-clamp-2">
                   {product.name}
                 </h2>
-                <p className="text-gray-700 text-sm mb-4 line-clamp-3">
+                <p className="text-gray-400 text-sm mb-4 line-clamp-3">
                   {product.description}
                 </p>
 
                 <div className="mt-auto flex justify-between items-center">
-                  <span className="text-blue-600 text-lg font-semibold">
-                    ${product.price.toFixed(2)}
+                  <span className="text-cyan-400 text-lg font-semibold">
+                    {product.price.toFixed(2)}
                   </span>
-                  <span className="text-sm text-blue-500 font-medium underline">
+                  <span className="text-sm text-cyan-400 font-medium underline">
                     Detayları Gör
                   </span>
                 </div>
@@ -92,15 +92,6 @@ export default function ProductsPage() {
           ))}
         </div>
       )}
-
-      {/* Ana Sayfaya Dön Butonu */}
-      <Link
-        href="/"
-        className="fixed top-6 left-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg p-3 flex items-center justify-center transition focus:outline-none focus:ring-2 focus:ring-blue-400 z-50"
-        aria-label="Ana Sayfaya Dön"
-      >
-        <span className="hidden sm:inline font-semibold">Ana Sayfa</span>
-      </Link>
     </div>
   );
 }

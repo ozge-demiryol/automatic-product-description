@@ -1,5 +1,7 @@
 # Etiket.ai: Yapay Zeka Destekli Otomatik Ürün Açıklaması Oluşturucu
 
+![](./public/etiket-ai-logo-md.png)
+
 **Slogan:** Zahmetsiz E-ticaret. Yapay zeka ile oluşturulmuş açıklamalar ve 7/24 ürün asistanı ile satışlarınızı artırın.
 
 ## ❓ Sunum: Bunu Neden Yaptık?
@@ -138,7 +140,7 @@ Bu proje, daha büyük bir vizyonun ilk adımıdır. Bu prototipi tam teşekkül
 
 ### **Çalışırken Görün!**
 
-* **Canlı Demo:** []
+* **Canlı Demo:** https://etiketai-ten.vercel.app/
 
 * **GitHub Reposu:** https://github.com/ozge-demiryol/automatic-product-description.git
 

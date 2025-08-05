@@ -71,34 +71,34 @@ export default function ProductDetailPage() {
     <div className="max-w-7xl mx-auto px-6 py-8 min-h-[80vh] flex flex-col gap-4">
       <Link
         href="/products"
-        className="text-blue-600 hover:underline mb-4 text-base font-medium"
+        className="text-cyan-400 hover:underline mb-4 text-base font-medium"
       >
         &larr; Tüm Ürünlere Geri Dön
       </Link>
 
       <div className="flex flex-col md:flex-row gap-6 h-full">
-        <div className="md:w-1/2 bg-white rounded-xl shadow-lg p-6 border border-gray-300 flex flex-col">
-          <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-3">
+        <div className="md:w-1/2 bg-gray-900 rounded-xl shadow-lg p-6 border border-gray-700 flex flex-col">
+          <h1 className="text-2xl md:text-3xl font-semibold text-gray-100 mb-3">
             {product.name}
           </h1>
 
-          <p className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-semibold mb-4 text-lg w-fit">
-            ${product.price?.toFixed(2)}
+          <p className="inline-block bg-cyan-100 text-cyan-800 px-3 py-1 rounded-full font-semibold mb-4 text-lg w-fit">
+            {product.price?.toFixed(2)}
           </p>
-
+          {product.imageUrl && <img src={product.imageUrl} alt={""} width="auto" height="auto" />}
           <p
-            className="text-gray-800 leading-relaxed text-sm md:text-base flex-grow overflow-auto"
+            className="text-gray-300 leading-relaxed text-sm md:text-base flex-grow overflow-auto mt-6"
             style={{ maxHeight: "300px" }}
           >
             {product.description}
           </p>
 
-          <button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white text-base font-medium px-6 py-3 rounded-lg shadow-sm transition w-full">
+          <button className="mt-6 bg-cyan-400 hover:bg-cyan-500 text-white text-base font-medium px-6 py-3 rounded-lg shadow-sm transition w-full">
             Sepete Ekle
           </button>
         </div>
 
-        <div className="md:w-1/2 bg-white rounded-xl shadow-lg border border-gray-300 p-4 flex flex-col min-h-[500px] max-h-[700px]">
+        <div className="md:w-1/2 bg-gray-900 rounded-xl shadow-lg border border-gray-700 p-4 flex flex-col h-full">
           <Chatbot productId={productId} initialMessage={initialBotMessage} />
         </div>
       </div>

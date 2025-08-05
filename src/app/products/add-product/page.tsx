@@ -213,7 +213,7 @@ export default function AddProductPage() {
     <div className="max-w-3xl mx-auto px-4 py-8">
       <Link
         href="/products"
-        className="text-blue-600 hover:underline mb-6 inline-block text-base font-medium"
+        className="text-cyan-400 hover:underline mb-6 inline-block text-base font-medium"
       >
         &larr; Tüm Ürünlere Geri Dön
       </Link>
@@ -224,17 +224,17 @@ export default function AddProductPage() {
       <div className="mb-8">
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
-            className={`bg-blue-600 h-2 rounded-full transition-all duration-500 ease-in-out ${currentStep === 1 ? "w-1/2" : "w-full"}`}
+            className={`bg-cyan-400 h-2 rounded-full transition-all duration-500 ease-in-out ${currentStep === 1 ? "w-1/2" : "w-full"}`}
           ></div>
         </div>
         <div className="flex justify-between mt-2 text-sm font-medium">
           <span
-            className={currentStep >= 1 ? "text-blue-600" : "text-gray-500"}
+            className={currentStep >= 1 ? "text-cyan-400" : "text-gray-300"}
           >
             Ürün Detayları
           </span>
           <span
-            className={currentStep >= 2 ? "text-blue-600" : "text-gray-500"}
+            className={currentStep >= 2 ? "text-cyan-400" : "text-gray-300"}
           >
             SSS Ekleme
           </span>
@@ -261,7 +261,7 @@ export default function AddProductPage() {
               <input
                 id="productName"
                 type="text"
-                className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2"
+                className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-cyan-600 focus:ring-cyan-100 rounded-lg px-4 py-2"
                 placeholder="Örn: Yeni Model Bluetooth Hoparlör"
                 value={productName}
                 onChange={(e) => setProductName(e.target.value)}
@@ -278,7 +278,7 @@ export default function AddProductPage() {
               <input
                 id="productCategory"
                 type="text"
-                className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2"
+                className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-cyan-600 focus:ring-cyan-100 rounded-lg px-4 py-2"
                 placeholder="Örn: Elektronik"
                 value={productCategory}
                 onChange={(e) => setProductCategory(e.target.value)}
@@ -293,7 +293,7 @@ export default function AddProductPage() {
                 id="productPrice"
                 type="number"
                 step="0.01"
-                className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2"
+                className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-cyan-600 focus:ring-cyan-100 rounded-lg px-4 py-2"
                 placeholder="Örn: 499.90"
                 value={productPrice}
                 onChange={(e) => setProductPrice(e.target.value)}
@@ -310,7 +310,7 @@ export default function AddProductPage() {
               <input
                 id="productImageUrl"
                 type="url"
-                className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2"
+                className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-cyan-600 focus:ring-cyan-100 rounded-lg px-4 py-2"
                 placeholder="https://..."
                 value={productImageUrl}
                 onChange={(e) => setProductImageUrl(e.target.value)}
@@ -326,7 +326,7 @@ export default function AddProductPage() {
                   key={tone}
                   type="button"
                   onClick={() => setProductTone(tone.toLowerCase())}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition ${productTone === tone.toLowerCase() ? "bg-blue-600 text-white shadow" : "bg-gray-200 text-gray-800 hover:bg-gray-300"}`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition ${productTone === tone.toLowerCase() ? "bg-cyan-400 text-white shadow" : "bg-gray-200 text-gray-800 hover:bg-gray-300"}`}
                 >
                   {tone}
                 </button>
@@ -341,7 +341,7 @@ export default function AddProductPage() {
             <textarea
               id="keywordsInput"
               rows={3}
-              className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2 resize-y"
+              className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-cyan-600 focus:ring-cyan-100 rounded-lg px-4 py-2 resize-y"
               placeholder="suya dayanıklı, yüksek ses kalitesi, uzun pil ömrü"
               value={keywordsInput}
               onChange={(e) => setKeywordsInput(e.target.value)}
@@ -352,7 +352,7 @@ export default function AddProductPage() {
           <button
             type="button"
             onClick={handleGenerateDescription}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50"
+            className="w-full bg-cyan-400 hover:bg-cyan-500 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50"
             disabled={isLoading}
           >
             {isGenerating
@@ -410,7 +410,7 @@ export default function AddProductPage() {
               <input
                 id="faqQuestion"
                 type="text"
-                className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2"
+                className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-cyan-600 focus:ring-cyan-100 rounded-lg px-4 py-2"
                 value={faqQuestion}
                 onChange={(e) => setFaqQuestion(e.target.value)}
                 placeholder="Örn: Garanti süresi ne kadar?"
@@ -423,7 +423,7 @@ export default function AddProductPage() {
               <textarea
                 id="faqAnswer"
                 rows={3}
-                className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-100 rounded-lg px-4 py-2 resize-y"
+                className="w-full mt-1 border border-gray-300 text-gray-700 placeholder:text-gray-400 focus:border-cyan-600 focus:ring-cyan-100 rounded-lg px-4 py-2 resize-y"
                 value={faqAnswer}
                 onChange={(e) => setFaqAnswer(e.target.value)}
                 placeholder="Örn: Tüm ürünlerimiz 2 yıl garantilidir."
@@ -431,7 +431,7 @@ export default function AddProductPage() {
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50"
+              className="w-full bg-cyan-600 hover:bg-cyan-700 text-white text-base font-medium px-5 py-2.5 rounded-lg shadow-sm transition disabled:opacity-50"
               disabled={isFaqLoading}
             >
               {isFaqLoading ? "Ekleniyor..." : "SSS Ekle"}
@@ -445,7 +445,7 @@ export default function AddProductPage() {
               </h4>
               <ul className="space-y-3">
                 {addedFaqs.map((faq, index) => (
-                  <li key={index} className="bg-blue-50 p-3 rounded-lg">
+                  <li key={index} className="bg-cyan-50 p-3 rounded-lg">
                     <p className="font-semibold text-sm text-gray-900">
                       {faq.question}
                     </p>
