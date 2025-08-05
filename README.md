@@ -24,17 +24,25 @@ Bu sadece bir araç değil; iş yapmanın yeni bir yolu. Gelin hem satıcı hem 
 
 1.  **Yeni Ürün, Minimum Çaba:** Bir satıcı, listelemek istediği yeni bir ürüne sahiptir. Platformumuza giriş yapar ve temel bilgileri girer: ürün adı, kategori ve birkaç açıklayıcı anahtar kelime (örneğin, "Kablosuz Kulaklık," "Gürültü Engelleme," "Uzun Pil Ömrü").
 
-2.  **Sihirli Düğme:** "Açıklama Oluştur" düğmesine tek bir tıklama ile sistemimiz bu minimal bilgiyi Gemini API'ye gönderir.
+2.  **Sihirli Düğme:** "Yapay Zeka ile Açıklama Oluştur" düğmesine tek bir tıklama ile sistemimiz bu minimal bilgiyi Gemini API'ye gönderir.
+
+![alt text](./docs/screenshots/add-product.png)
 
 3.  **Anında İçerik:** Saniyeler içinde, ikna edici ve SEO dostu bir ürün açıklaması belirir. Bu sadece bir metin bloğu değil; arama motorları ve potansiyel alıcılar için tasarlanmış ikna edici bir anlatıdır.
 
-4.  **Akıllı Destek Oluşturma:** Açıklamayı kaydettikten sonra, satıcıdan sıkça sorulan soruların (SSS) bir listesini yüklemesi istenir. Bu, güçlü bir destek aracı oluşturmak için çok önemli bir adımdır ve ürün sayfasını müşteri etkileşimi için hazırlar.
+![alt text](./docs/screenshots/generate-description.png)
+
+4.  **Akıllı Destek Oluşturma:** Açıklamayı kaydettikten sonra, satıcıdan sıkça sorulan soruların (SSS) bir listesini yüklemesi istenir. Bu, güçlü bir destek aracı oluşturmak için çok önemli bir adımdır ve ürün sayfasını müşteri etkileşimi için hazırlar. Satıcı girdiği SSS'leri istediği zaman güncelleyebilir.
+
+![alt text](./docs/screenshots/add-faq.png)
 
 ### Alıcının Deneyimi
 
-1.  **Bir Soru Ortaya Çıkar:** Potansiyel bir alıcı ürün sayfasına gider. Kulaklığın pil ömrü hakkında bir sorusu vardır. Açıklamayı aramak veya yanıt beklemek yerine, sohbet robotu simgesine tıklar.
+1.  **Bir Soru Ortaya Çıkar:** Potansiyel bir alıcı ürün sayfasına gider. Kulaklığın pil ömrü hakkında bir sorusu vardır. Açıklamayı aramak veya yanıt beklemek yerine, sohbet robotuyla etkileşime girer.
 
-2.  **Anında, Doğru Yanıtlar:** Alıcı, "Pil ömrü ne kadar?" diye sorar. RAG ile desteklenen yapay zeka asistanımız, satıcının SSS'lerinden ve ürün detaylarından ilgili bilgileri anında alır ve gerçek zamanlı olarak doğru ve faydalı bir yanıt verir.
+2.  **Anında, Doğru Yanıtlar:** Alıcı, "Garanti süresi ne kadar?" diye sorar. RAG ile desteklenen yapay zeka asistanımız, satıcının SSS'lerinden ve ürün detaylarından ilgili bilgileri anında alır ve gerçek zamanlı olarak doğru ve faydalı bir yanıt verir.
+
+![alt text](./docs/screenshots/chatbot.png)
 
 ## ⚙️ Teknik Detaylar: "Nasıl" Yaptık?
 
@@ -128,19 +136,25 @@ Bu proje, daha büyük bir vizyonun ilk adımıdır. Bu prototipi tam teşekkül
 
       * Strateji: Satıcıların ürün açıklamalarının SEO performansını takip etmelerini sağlayan basit analiz araçları sunmak. Hangi anahtar kelimelerin iyi performans gösterdiğini veya hangi ürün açıklamalarının daha fazla dönüşüm sağladığını gösteren raporlar oluşturmak. Bu özellik, ürününüzü sadece içerik oluşturucu bir araçtan daha fazlası haline getirecektir.
 
-## 👫 Ekip ve Teşekkürler
+## 👫 Ekip Hakkında
 
-* **Ekip Üyeleri:**
+Takımımız: DualCore
 
-* **Teşekkürler:**
+DualCore ekibi olarak, teknik becerilerimizi ve ürün vizyonumuzu birleştirdik.
 
-    * Bu harika fırsatı yarattıkları için hackathon organizatörlerine ve sponsorlarına minnettarız.
+**Ekip Üyeleri:**
+
+- Özge Demiryol: Yazılım geliştirme uzmanı. Yapay zeka entegrasyonu, sohbet botu ve projenin ürün kararlarının şekillendirilmesinde çalıştı. Full-stack geliştirmede aktif olarak görev aldı.
+  
+- Halil İbrahim Çakır: Kıdemli yazılım geliştirme uzmanı, aynı zamanda Etiket.ai'ın isim babası. Projenin mimarisini tasarladı ve hem backend hem frontend tarafında önemli geliştirmeler yaptı.
+
+UI/UX tasarımı, özellik önceliklendirme ve kullanıcı senaryolarında sürekli fikir alışverişi yaptık. Teknik olarak güçlü ama aynı zamanda kullanıcı dostu bir ürün ortaya koymak için birlikte çalıştık.
 
 ## ✨ Başlarken
 
 ### **Çalışırken Görün!**
 
-* **Canlı Demo:** https://etiketai-ten.vercel.app/
+* **Canlı Demo:** https://etiket-ai.vercel.app/
 
 * **GitHub Reposu:** https://github.com/ozge-demiryol/automatic-product-description.git
 
